@@ -1,3 +1,7 @@
 .wrangler/
 node_modules/
 config.js
+PriorChatBotToReference
+.DS_Store
+dist/
+*.log
