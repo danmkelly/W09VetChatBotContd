@@ -281,7 +281,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="filter-label">Species:</span>
         <button class="filter-chip species-dog active" onclick="toggleSpecies('dog',this)">&#128054; Dog</button>
         <button class="filter-chip species-cat active" onclick="toggleSpecies('cat',this)">&#128049; Cat</button>
-        <button class="filter-chip active" onclick="toggleSpecies('rabbit',this)">&#128007; Rabbit</button>
+        <button class="filter-chip species-rabbit active" onclick="toggleSpecies('rabbit',this)">&#128007; Rabbit</button>
         <button class="filter-chip active" onclick="toggleSpecies('small mammal',this)">&#128059; Small</button>
         <button class="filter-chip active" onclick="toggleSpecies('bird',this)">&#128038; Bird</button>
         <span class="filter-label" style="margin-left:8px">Extras:</span>
@@ -590,31 +590,32 @@ function findOffers(species){
 function extractKeywords(txt){
   var t=S(txt);
   var species=["dog","cat","rabbit","small mammal","bird"];
-  var categories=["consultation","preventive","nutrition","vaccination","microchip","dental","surgery","diagnostics","grooming","behaviour","end-of-life","emergency"];
+  var categories=["consultation","preventive","nutrition","vaccination","microchip","dental","surgery","diagnostics","grooming","behaviour","end-of-life","emergency","home visits"];
   var found={species:[],categories:[],isOffer:false,isTelehealth:false,isPriceQuery:false};
   species.forEach(function(s){if(t.indexOf(s)>-1)found.species.push(s)});
   categories.forEach(function(c){if(t.indexOf(c)>-1)found.categories.push(c)});
-  if(/offer|discount|sale|save|off|special/i.test(t))found.isOffer=true;
-  if(/telehealth|video|remote|online consult/i.test(t))found.isTelehealth=true;
+  if(/offer|discount|sale|save|\boff\b|special|deal|promotion|reduced|bargain|free/i.test(t))found.isOffer=true;
+  if(/telehealth|video|remote|online consult|virtual|online appointment/i.test(t))found.isTelehealth=true;
   if(/price|cost|euro|how much|what.*cost/i.test(t))found.isPriceQuery=true;
-  if(/microchip/i.test(t))found.categories.push("microchip");
-  if(/vaccin/i.test(t))found.categories.push("vaccination");
+  if(/microchip|chipping|\bchip\b/i.test(t))found.categories.push("microchip");
+  if(/vaccin|jab|injection|shot|booster|inoculation/i.test(t))found.categories.push("vaccination");
   if(/groom|bath|brush|nail|deshed/i.test(t))found.categories.push("grooming");
   if(/emergency|urgent|out.of.hours/i.test(t))found.categories.push("emergency");
-  if(/dental|teeth|scale.*polish|extraction/i.test(t))found.categories.push("dental");
+  if(/dental|dentistry|teeth|tooth|scale.*polish|extraction/i.test(t))found.categories.push("dental");
   if(/surgery|neuter|spay|castrat|lump.*remov|wound/i.test(t))found.categories.push("surgery");
   if(/behaviour|behavior|training|socialisation|socialization/i.test(t))found.categories.push("behaviour");
   if(/nutrition|diet|weight|food|prescription diet/i.test(t))found.categories.push("nutrition");
   if(/wellness|checkup|check.up|new pet|registration|flea|tick|worm/i.test(t))found.categories.push("preventive");
-  if(/blood|urine|x.ray|ultrasound|scan|diagnos/i.test(t))found.categories.push("diagnostics");
+  if(/blood|urine|x.ray|ultrasound|scan|diagnos|lab.work|lab.test|biopsy/i.test(t))found.categories.push("diagnostics");
   if(/end.of.life|quality.of.life|euthanasia|goodbye/i.test(t))found.categories.push("end-of-life");
-  if(/home.visit/i.test(t))found.categories.push("consultation");
+  if(/home.visit|home.call|health.check|vet.visit|consult|exam|examination|appointment/i.test(t))found.categories.push("consultation");
+  if(/home.visit|house call|at.home/i.test(t))found.categories.push("home visits");
   if(/passport|travel|pet passport/i.test(t))found.categories.push("microchip");
   return found;
 }
 
 // === LLM ===
-var BOT_VOICE="You are MeadowBot, a veterinary clinic assistant at Meadow Vet Care, a modern Irish veterinary practice in Dublin. You serve dogs, cats, rabbits, small mammals, and birds. You know the clinic's 94 services inside out: consultations, preventive care, vaccinations, surgery, dentistry, diagnostics, grooming, nutrition, behaviour, microchipping, end-of-life care, and emergencies. You're warm, knowledgeable, and genuinely care about animals. Irish flavour: use 'grand','sound','class','deadly','craic' like seasoning (but sparingly). Be helpful and direct: when someone asks about services or prices, give specific details. When asked about offers, mention them. When asked about booking, guide them to the booking option. Never diagnose medical conditions. Keep it 2-5 sentences. No em dashes. No markdown. Talk like a friendly vet receptionist.";
+var BOT_VOICE="You are MeadowBot, a veterinary clinic assistant at Meadow Vet Care, a modern Irish veterinary practice in Dublin. You serve dogs, cats, rabbits, small mammals, and birds. You know the clinic's 94 services inside out: consultations, preventive care, vaccinations, surgery, dentistry, diagnostics, grooming, nutrition, behaviour, microchipping, end-of-life care, home visits, and emergencies. You're warm, knowledgeable, and genuinely care about animals. Irish flavour: use 'grand','sound','class','deadly','craic' like seasoning (but sparingly). Be helpful and direct: when someone asks about services or prices, give specific details. When asked about offers, mention them. When asked about booking, guide them to the booking option. Never diagnose medical conditions. Keep it 2-5 sentences. No em dashes. No markdown. Talk like a friendly vet receptionist.";
 
 function getMemoryPreamble(){
   var parts=[];
