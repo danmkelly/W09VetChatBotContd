@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>W08 Vet Chatbot - Project Brief for Victor</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--surface:#1A1A1A;--surface2:#242424;--border:#2E2E2E;
+  --text:#E8E4DD;--text-dim:#8A857C;--accent:#4A9E8E;--accent-glow:rgba(74,158,142,0.3);
+  --accent2:#E85D3F;--accent3:#C4A44A;--font:'Inter',system-ui,-apple-system,sans-serif;
+}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;
+}
+.page{max-width:1100px;margin:0 auto;padding:60px 24px 80px;display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
+
+/* Sidebar */
+.page-sidebar{position:sticky;top:24px;display:flex;flex-direction:column;gap:16px}
+.sidebar-cta{display:flex;flex-direction:column;justify-content:center;text-align:center;padding:20px 24px;border-radius:12px;text-decoration:none;font-weight:800;transition:all .2s;box-shadow:0 8px 30px rgba(0,0,0,0.3);flex:1}
+.sidebar-cta-MeadowBot{background:linear-gradient(-45deg,var(--accent),#2A5A4E,#4A9E8E,#3A7E6E,#4A9E8E);background-size:400% 400%;color:#fff;animation:wave-cta 2.5s ease infinite}
+.sidebar-cta-MeadowBot:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(74,158,142,0.5)}
+.sidebar-cta-qa{background:linear-gradient(135deg,#2A1A1A,#4A2A2A);color:#fff;border:2px solid rgba(232,93,63,0.3)}
+.sidebar-cta-qa:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(232,93,63,0.3);border-color:var(--accent2)}
+.sidebar-cta .cta-main{font-size:1.05rem;display:block;margin-bottom:4px;color:#fff}
+.sidebar-cta .cta-sub{font-size:0.7rem;opacity:0.85;font-weight:500;margin-top:4px;color:#fff}
+.sidebar-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px}
+
+/* Hero */
+.hero{text-align:center;padding:60px 0 50px;border-bottom:1px solid var(--border);margin-bottom:50px}
+.hero-icon{font-size:3.5rem;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(74,158,142,0.4))}
+.hero h1{font-size:2.4rem;font-weight:900;color:#F5E6D3;letter-spacing:-0.5px;margin-bottom:10px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-size:0.95rem;color:var(--text-dim);max-width:600px;margin:0 auto;line-height:1.6}
+
+/* Sections */
+.section{margin-bottom:48px}
+.section-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
+.section h2{font-size:1.5rem;font-weight:800;margin-bottom:16px;color:#F5E6D3}
+.section p{font-size:0.92rem;color:var(--text-dim);margin-bottom:14px;line-height:1.75}
+.section p strong{color:var(--text)}
+
+/* Card grid */
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.card{
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:20px;transition:all .2s;
+}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card-icon{font-size:1.6rem;margin-bottom:10px}
+.card h4{font-size:0.82rem;font-weight:700;margin-bottom:6px;color:var(--text)}
+.card p{font-size:0.72rem;color:var(--text-dim);line-height:1.5}
+
+/* Tech list */
+.tech-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.tech-badge{
+  background:var(--surface2);border:1px solid var(--border);color:var(--text);
+  padding:8px 16px;border-radius:20px;font-size:0.78rem;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+}
+.tech-badge-icon{font-size:1rem}
+
+/* Architecture diagram */
+.arch{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-top:20px}
+.arch-flow{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.arch-node{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:14px 20px;text-align:center;font-size:0.78rem;font-weight:600;
+}
+.arch-node.label{background:var(--accent);color:#fff;border-color:var(--accent);font-size:0.7rem}
+.arch-arrow{color:var(--accent3);font-size:1.2rem;font-weight:700}
+.arch-node.small{font-size:0.68rem;padding:10px 14px}
+
+/* CTA */
+.cta{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:linear-gradient(-45deg,var(--accent),#2A5A4E,#4A9E8E,#3A7E6E,#4A9E8E);
+  background-size:400% 400%;
+  color:#fff;padding:20px 40px;border-radius:12px;text-decoration:none;
+  font-weight:800;letter-spacing:0.5px;margin-top:30px;transition:all .2s;
+  box-shadow:0 8px 30px rgba(74,158,142,0.3);
+  animation:wave-cta 2.5s ease infinite;
+}
+.cta-main{font-size:1.1rem}
+.cta-tagline{font-size:0.7rem;font-weight:500;opacity:0.85;font-style:italic;letter-spacing:0.2px}
+.cta:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(74,158,142,0.5)}
+.cta-sub{text-align:center;font-size:0.72rem;color:var(--text-dim);margin-top:8px}
+@keyframes wave-cta{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* Service stat cards */
+.stat-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+.stat-card{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:16px 20px;text-align:center;flex:1;min-width:100px;
+}
+.stat-card .stat-value{font-size:1.8rem;font-weight:900;color:var(--accent);display:block}
+.stat-card .stat-label{font-size:0.62rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px}
+
+@media(max-width:700px){
+  .page{grid-template-columns:1fr}
+  .page-sidebar{position:static;display:flex;flex-direction:row;gap:12px;flex-wrap:wrap}
+  .sidebar-cta{flex:1 1 200px}
+  .card-grid{grid-template-columns:1fr}
+  .hero h1{font-size:1.6rem}
+  .arch-flow{flex-direction:column}
+  .arch-arrow{transform:rotate(90deg)}
+}
+</style>
+</head>
+<body>
+<div class="hero" style="max-width:1100px;margin:0 auto;padding:60px 24px 40px;text-align:center;border-bottom:1px solid var(--border);margin-bottom:50px">
+  <div class="hero-icon">&#128062;</div>
+  <h1 style="font-size:2.4rem;font-weight:900;color:#F5E6D3;letter-spacing:-0.5px;margin-bottom:10px">Hi <span style="color:var(--accent3)">Victor</span>! Welcome to the Meadow Vet Care chatbot project.</h1>
+  <p class="hero-sub" style="font-size:0.95rem;color:var(--text-dim);max-width:700px;margin:0 auto;line-height:1.6">This page gives you the context and technical story behind the demo &mdash; what problem it solves, how the MCP pattern works, and where to find the working solution.</p>
+</div>
+<div class="page">
+
+  <div class="page-main">
+
+  <!-- The Business Challenge -->
+  <div class="section">
+    <div class="section-label">The Business Challenge</div>
+    <h2>Bringing the vet clinic counter online</h2>
+    <p><strong>Meadow Vet Care</strong> is a modern Irish veterinary practice serving dogs, cats, rabbits, small mammals, and birds. With <strong>90+ services</strong> across consultations, preventive care, vaccinations, dentistry, surgery, diagnostics, grooming, and behaviour &mdash; their offering is comprehensive but complex for customers to navigate.</p>
+    <p>The problem: <strong>customers call the clinic to ask the same questions</strong>: What dog services do you offer? Are there any offers on microchipping? Do you have telehealth services? What's the price for a cat dental? Is there availability this week? These repetitive queries tie up reception staff and frustrate customers who just want quick answers.</p>
+    <p>The answer: a friendly, AI-powered chatbot named <strong>MeadowBot</strong> that knows every service, every price, every special offer, and every available slot &mdash; straight from the clinic's live data.</p>
+  </div>
+
+  <!-- The MCP Idea -->
+  <div class="section">
+    <div class="section-label">The MCP Concept</div>
+    <h2>Giving an AI a live tool: the Model Context Protocol pattern</h2>
+    <p>This week's module concept is <strong>MCP &mdash; Model Context Protocol</strong>: giving an LLM access to a live data source so it can answer questions with real, up-to-date information rather than relying on training data alone.</p>
+    <p>For Meadow Vet Care, the live data source is a <strong>Google Sheet</strong> containing the clinic's entire service catalogue: 94 services, each with a service ID, category, species, price, duration, appointment requirements, availability window, slots remaining this week, and any active special offers.</p>
+    <p>When a customer asks <em>"Are there any offers on microchipping?"</em>, MeadowBot fetches the live sheet, filters for Microchip & ID category services with non-empty special offers, and replies with the exact prices and offer details. No hard-coded data. No stale information. <strong>One source of truth.</strong></p>
+
+    <div class="stat-row">
+      <div class="stat-card"><span class="stat-value">94</span><span class="stat-label">Live Services</span></div>
+      <div class="stat-card"><span class="stat-value">5</span><span class="stat-label">Pet Species</span></div>
+      <div class="stat-card"><span class="stat-value">13</span><span class="stat-label">Categories</span></div>
+      <div class="stat-card"><span class="stat-value">24+</span><span class="stat-label">Active Offers</span></div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section">
+    <div class="section-label">How MeadowBot Works</div>
+    <h2>AI-powered vet clinic assistant, grounded in live data</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">&#129302;</div>
+        <h4>Conversational AI</h4>
+        <p>MeadowBot is powered by <strong>DeepSeek</strong>, a large language model. She understands natural questions like "How much is a dental scale and polish for my medium-sized dog?" and responds with accurate, friendly advice drawn from the live service sheet.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128202;</div>
+        <h4>Live Google Sheet (MCP)</h4>
+        <p>All 94 services, prices, offers, and slot availability are fetched live from the clinic's <strong>Google Sheet</strong> via CSV export. The chatbot queries the sheet in real time &mdash; no stale data, no hard-coded catalogue. This is the MCP pattern in practice.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128197;</div>
+        <h4>Booking &amp; Calendar</h4>
+        <p>Services that require appointments surface an inline <strong>calendar booking flow</strong>. Customers pick a day, see available time slots, and submit a booking request with their pet's details. A simple, friction-free path from question to booking.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Limitations -->
+  <div class="section">
+    <div class="section-label">Limitations &amp; Known Weak Spots</div>
+    <h2>Where MeadowBot still struggles</h2>
+    <p>Like any real-world AI project, MeadowBot has rough edges. Here are the honest ones:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">&#128270;</div>
+        <h4>NLP Intent Parsing</h4>
+        <p>MeadowBot uses <strong>keyword matching + LLM disambiguation</strong> to understand whether a user is asking about services, prices, offers, or booking. Complex compound queries ("how much for a dental for my cat and is there an offer on vaccinations for my dog?") can confuse the intent router. The <strong>slot-filling gate</strong> asks clarifying questions when confidence is low, but multi-pet, multi-service queries remain challenging.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128202;</div>
+        <h4>Sheet Data Latency</h4>
+        <p>The Google Sheet is fetched at page load and cached for the session. <strong>Slot counts and offers update only on refresh</strong>. If the clinic updates the sheet during a customer session, the chatbot won't reflect those changes until the page reloads. For a production system, a server-side cache with TTL-based refresh would be needed.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#9888;</div>
+        <h4>Conversation Context</h4>
+        <p>MeadowBot maintains conversation history (last 10 exchanges) within the current session, and <strong>persists memory across visits</strong> using browser localStorage &mdash; including your name, your pets' names, and recent service searches. On return visits, MeadowBot greets you personally and references past queries. This memory is <strong>device-only</strong>: no data leaves your browser. A "Clear memory" button lets you wipe it at any time.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128197;</div>
+        <h4>Booking Is Simulated</h4>
+        <p>The calendar booking flow is a front-end simulation: it captures the selected service, date, time, and pet details into localStorage, but <strong>does not write back to any real booking system</strong>. This is appropriate for the academic scope but would need a real API integration (e.g. Google Calendar, Cliniko, or Provet Cloud) for production use.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#127908;</div>
+        <h4>Voice Input Limitations</h4>
+        <p>Voice recognition uses the browser's built-in <strong>Web Speech API</strong>, which varies in accuracy across browsers and devices. Pet breed names, medical terms, and Irish addresses are particularly prone to transcription errors. Voice output (TTS) may struggle with veterinary terminology.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128187;</div>
+        <h4>No Real Backend</h4>
+        <p>MeadowBot is a <strong>pure client-side application</strong> with no server-side database, authentication, or booking persistence. The Cloudflare Worker proxy handles API key security, but all other state is browser-local. This is deliberate for the academic scope but limits production-readiness.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical Architecture -->
+  <div class="section">
+    <div class="section-label">Technical Architecture</div>
+    <h2>Secure, serverless, and key-safe</h2>
+    <p>The LLM API (DeepSeek) requires a secret key. This is <strong>never exposed to the browser</strong>. A <strong>Cloudflare Worker</strong> acts as a thin proxy layer: the browser calls the worker, the worker injects the secret key server-side, and the response flows back. The Google Sheet data is fetched client-side via public CSV export (no auth needed for reading). No keys in source code, no keys in DevTools.</p>
+
+    <div class="arch">
+      <div class="arch-flow">
+        <div class="arch-node label">Browser</div>
+        <span class="arch-arrow">&rarr;</span>
+        <div class="arch-node label">Cloudflare Worker</div>
+        <span class="arch-arrow">&rarr;</span>
+        <div class="arch-node">
+          <div>DeepSeek LLM</div>
+          <div style="font-size:0.6rem;color:var(--text-dim);margin-top:2px">Conversational AI</div>
+        </div>
+        <div class="arch-node">
+          <div>Google Sheets</div>
+          <div style="font-size:0.6rem;color:var(--text-dim);margin-top:2px">Service Catalogue</div>
+        </div>
+        <div class="arch-node">
+          <div>localStorage</div>
+          <div style="font-size:0.6rem;color:var(--text-dim);margin-top:2px">Memory + Bookings</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tech-row" style="margin-top:24px">
+      <div class="tech-badge"><span class="tech-badge-icon">&#127760;</span> GitHub Pages</div>
+      <div class="tech-badge"><span class="tech-badge-icon">&#9729;</span> Cloudflare Workers</div>
+      <div class="tech-badge"><span class="tech-badge-icon">&#129302;</span> DeepSeek Chat</div>
+      <div class="tech-badge"><span class="tech-badge-icon">&#128202;</span> Google Sheets API</div>
+      <div class="tech-badge"><span class="tech-badge-icon">&#9889;</span> Vanilla JS</div>
+      <div class="tech-badge"><span class="tech-badge-icon">&#127912;</span> Pure CSS</div>
+    </div>
+  </div>
+
+  <!-- Agent Team -->
+  <div class="section">
+    <div class="section-label">Development Approach</div>
+    <h2>Built by a team of AI agent colleagues + MCP tools</h2>
+    <p>The project was developed using a structured team of specialist AI agents, each with a defined role, domain expertise, and boundaries. This mirrors how a real innovation team would operate.</p>
+    <p>The team's design decisions are grounded in <strong>four academic best-practice frameworks</strong> from the Customer Engagement &amp; AI module: the seven-dimension chatbot taxonomy (Adamopoulou &amp; Moussiades 2020), CASA / Computers Are Social Actors (Reeves &amp; Nass 1996), conversation flow anatomy, and Grice's maxims of conversation (Grice 1975). Each specialist agent owns the framework dimensions relevant to their domain.</p>
+    <p style="margin-top:8px;padding:12px 16px;background:rgba(74,158,142,0.08);border:1px solid rgba(74,158,142,0.2);border-radius:8px"><strong style="color:var(--accent)">&#128269; QA Dashboard:</strong> The solution has been assessed against all four frameworks with a full academic design review. <strong>Design score: 4.0/5 (Grade B) &middot; Functional score: 3.5/5 (Grade B-)</strong>. 22 academic findings (A01&ndash;A22) + 16 functional bugs (F01&ndash;F16) &mdash; all resolved. <a href="qa.html" style="color:var(--accent);font-weight:700">View the full QA dashboard &rarr;</a></p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">&#128270;</div>
+        <h4>@Fionn &mdash; Researcher</h4>
+        <p>Vet clinic domain expert. Researched Meadow Vet Care's service catalogue structure, mapped the 94 services across 13 categories, and built the knowledge taxonomy that powers MeadowBot's recommendations.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#127912;</div>
+        <h4>@Siobhan &mdash; Designer</h4>
+        <p>UX designer. Created the two-panel chat+services layout, the calendar booking flow, the species/category filter chips, the special-offer badge system, and all visual interactions with a warm, clinical-yet-friendly aesthetic.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128736;</div>
+        <h4>@Dot &mdash; Maker</h4>
+        <p>Chatbot engineer. Built MeadowBot's conversation engine, the Google Sheets MCP integration, intent routing logic, service filtering/search, calendar slot selection, and the memory/personalisation system.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128295;</div>
+        <h4>@Niamh &mdash; Backend</h4>
+        <p>Infrastructure engineer. Designed and deployed the Cloudflare Worker proxy that keeps the DeepSeek API key secure on the server side. Configured CORS for the Google Sheets CSV fetch.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128269;</div>
+        <h4>@Keelin &mdash; QA</h4>
+        <p>Quality assurance specialist. Built a comprehensive test plan covering conversation flows, service queries, booking paths, and edge cases. Scored the solution against all four academic frameworks. <a href="qa.html" style="color:var(--accent);font-weight:600">View QA dashboard &rarr;</a></p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128101;</div>
+        <h4>@Cormac &mdash; Manager</h4>
+        <p>Orchestrator and delivery lead. Decomposed tasks, dispatched work to specialists, ran quality gates, and synthesised outputs into the final product. Applied the MCP pattern as the architectural spine.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128062;</div>
+        <h4>@MeadowBot &mdash; The Bot</h4>
+        <p>The AI vet clinic assistant. Powered by DeepSeek with live Google Sheet enrichment. Friendly, knowledgeable, warm Irish tone. Knows every service, price, offer, and slot.</p>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /.page-main -->
+
+  <div class="page-sidebar">
+    <div class="sidebar-label">Jump to action</div>
+
+    <a class="sidebar-cta sidebar-cta-qa" href="qa.html">
+      <span class="cta-main">&#128269; QA Dashboard</span>
+      <span class="cta-tagline">Design: 4.0/5 (B) &middot; Functional: 3.5/5 (B-)</span>
+    </a>
+
+    <a class="sidebar-cta sidebar-cta-MeadowBot" href="index.html">
+      <span class="cta-main">&#128062; Chat with MeadowBot</span>
+      <span class="cta-tagline">Ask about services, prices, offers, or book an appointment!</span>
+    </a>
+  </div>
+</div>
+
+
+</body>
+</html>

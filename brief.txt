@@ -1,0 +1,7 @@
+Meadow Vet Care is a modern Irish vet clinic (dogs, cats, rabbits, small mammals, birds) with 90+ services.
+
+Build a customer chatbot that answers real questions from the clinic's live data. This is the MCP idea: giving your AI a live tool. Include the front end (chat page), live data fetched from the Google Sheet, the LLM brain that replies in natural language.
+
+Google sheet is here :: https://docs.google.com/spreadsheets/d/1JhSODtviGHzXru6Eb5MhfXfVIF5vtJk3pclzzv7j2l4/edit?gid=1277715587#gid=1277715587 
+
+Test questions: What dog services do you offer? Are there any offers on microchipping? Do you have telehealth services? Etc.

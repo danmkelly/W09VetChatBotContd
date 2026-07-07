@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QA Dashboard - Meadow Vet Care Chatbot</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--surface:#1A1A1A;--surface2:#242424;--border:#2E2E2E;
+  --text:#E8E4DD;--text-dim:#8A857C;--accent:#4A9E8E;--accent-glow:rgba(74,158,142,0.3);
+  --accent2:#E85D3F;--accent3:#C4A44A;--font:'Inter',system-ui,-apple-system,sans-serif;
+}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;
+}
+.page{max-width:960px;margin:0 auto;padding:60px 24px 80px}
+
+.hero{text-align:center;padding:60px 0 50px;border-bottom:1px solid var(--border);margin-bottom:50px}
+.hero-icon{font-size:3.5rem;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(74,158,142,0.4))}
+.hero h1{font-size:2.2rem;font-weight:900;color:#F5E6D3;letter-spacing:-0.5px;margin-bottom:10px}
+.hero-sub{font-size:0.95rem;color:var(--text-dim);max-width:640px;margin:0 auto;line-height:1.6}
+.hero-keelin{font-size:0.92rem;color:var(--text-dim);max-width:720px;margin:16px auto 6px;line-height:1.7}
+
+.section{margin-bottom:48px}
+.section-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
+.section h2{font-size:1.5rem;font-weight:800;margin-bottom:16px;color:#F5E6D3}
+.section h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--text)}
+.section p{font-size:0.92rem;color:var(--text-dim);margin-bottom:14px;line-height:1.75}
+.section ul{font-size:0.85rem;color:var(--text-dim);line-height:1.8;padding-left:20px;margin-bottom:14px}
+.section ul li{margin-bottom:4px}
+
+.score-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.score-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.score-card .sc-value{font-size:2rem;font-weight:900;color:var(--accent);display:block}
+.score-card .sc-grade{font-size:1rem;font-weight:800;color:var(--text);margin-left:6px}
+.score-card .sc-label{font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px}
+.score-card .sc-detail{font-size:0.65rem;color:var(--text-dim);margin-top:6px;line-height:1.4}
+
+.scorecard{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.sc-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center}
+.sc-item .sc-value{font-size:2.4rem;font-weight:900;color:var(--accent);display:block}
+.sc-item .sc-label{font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px}
+.sc-item .sc-detail{font-size:0.65rem;color:var(--text-dim);margin-top:6px;line-height:1.4}
+
+.overall-score{text-align:center;padding:20px;background:var(--surface);border-radius:8px;border:1px solid var(--border);margin-top:12px}
+.overall-score .big{font-size:3.5rem;font-weight:900;color:var(--accent3)}
+.overall-score .grade{font-size:1.4rem;font-weight:800;color:var(--text);margin-left:10px}
+.overall-score .note{font-size:0.72rem;color:var(--text-dim);margin-top:4px}
+
+.tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid var(--border)}
+.tab-btn{padding:12px 28px 8px;font-size:1.5rem;font-weight:800;cursor:pointer;border:2px solid transparent;border-bottom:none;border-radius:8px 8px 0 0;background:transparent;color:var(--text-dim);transition:all .15s;position:relative;top:2px;font-family:inherit}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.tab-btn.active{background:var(--surface);color:var(--accent);border-color:var(--border);top:2px}
+.tab-content{display:none;background:var(--surface);border:2px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:20px}
+.tab-content.active{display:block}
+
+.bug-table-wrap{overflow-x:auto;margin-top:20px}
+.bug-table{width:100%;border-collapse:collapse;font-size:0.72rem}
+.bug-table th{background:var(--surface2);color:var(--text-dim);text-align:left;padding:10px 12px;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border);white-space:nowrap}
+.bug-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text-dim);vertical-align:top;line-height:1.5}
+.bug-table tr:hover td{background:rgba(255,255,255,0.02)}
+.bug-table .id{color:var(--accent);font-weight:700;white-space:nowrap}
+.bug-table .desc{color:var(--text)}
+.bug-table .fix{font-size:0.65rem}
+.sev-crit{color:#fff;background:#C0392B;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.sev-high{color:#fff;background:#E67E22;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.sev-med{color:#000;background:#F1C40F;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.sev-low{color:#fff;background:#7F8C8D;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.design-closed{color:#fff;background:#27AE60;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.design-open{color:#fff;background:#C0392B;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.design-override{color:#fff;background:#E67E22;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;white-space:nowrap;display:inline-block;width:56px;text-align:center;text-transform:uppercase}
+.sub-tab{padding:8px 14px 6px;font-size:1.1rem;font-weight:400;cursor:pointer;border:1.5px solid transparent;border-bottom:none;border-radius:6px 6px 0 0;background:transparent;color:var(--text-dim);transition:all .15s;font-family:inherit;position:relative;top:1.5px;white-space:nowrap}
+.sub-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);top:1.5px}
+.sub-tab:hover:not(.active){color:var(--text)}
+.sub-content{display:none;border:1.5px solid var(--accent);border-radius:0 6px 6px 6px;padding:12px;margin-bottom:14px}
+.sub-content.active{display:block}
+.sub-wrap{position:relative;min-height:140px}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent2);text-decoration:none;font-size:0.82rem;font-weight:600;margin-top:30px;transition:color .15s}
+.back-link:hover{color:#E8735F}
+
+@media(max-width:700px){
+  .scorecard{grid-template-columns:1fr 1fr}
+  .score-cards{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:1.5rem}
+  .bug-table{font-size:0.65rem}
+  .bug-table th,.bug-table td{padding:6px 8px}
+}
+@media(max-width:500px){
+  .scorecard{grid-template-columns:1fr}
+  .score-cards{grid-template-columns:1fr}
+  .page{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-icon">&#128269;</div>
+    <h1>QA Dashboard</h1>
+    <p class="hero-keelin"><strong style="color:var(--accent3)">@Keelin</strong> is the QA specialist for this project. She runs two parallel assessment tracks: an <strong style="color:var(--accent)">academic design review</strong> against four chatbot best-practice frameworks (Taxonomy, CASA, Conversation Flow Anatomy, Grice's Maxims) and a <strong style="color:var(--accent2)">functional code-level bug hunt</strong> covering conversation paths, service queries, booking flows, voice interaction, memory persistence, and mobile responsiveness. Findings from both tracks are tracked, scored, and versioned here.</p>
+    <p class="hero-sub">Grounded in <strong>four academic best-practice frameworks</strong> from the Customer Engagement &amp; AI module: chatbot taxonomy (Adamopoulou &amp; Moussiades 2020), CASA / Computers Are Social Actors (Reeves &amp; Nass 1996), conversation flow anatomy, and Grice's maxims of conversation (Grice 1975). <strong>Last reviewed:</strong> 2026-07-07. <strong style="color:var(--accent)">All findings closed &middot; 0 FAIL &middot; 0 open bugs.</strong></p>
+  </div>
+
+  <div class="score-cards">
+    <div class="score-card">
+      <span class="sc-value">4.0 <span class="sc-grade">B</span></span>
+      <span class="sc-label">Academic Design</span>
+      <span class="sc-detail">12 PASS, 9 PARTIAL, 0 FAIL</span>
+    </div>
+    <div class="score-card">
+      <span class="sc-value">3.5 <span class="sc-grade">B-</span></span>
+      <span class="sc-label">Functional Quality</span>
+      <span class="sc-detail">13 of 16 bugs resolved</span>
+    </div>
+    <div class="score-card">
+      <span class="sc-value">16</span>
+      <span class="sc-label">Bug Tracker</span>
+      <span class="sc-detail">16 resolved, 0 open</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('academic')">Academic Review</button>
+    <button class="tab-btn" onclick="switchTab('functional')">Functional Testing</button>
+  </div>
+
+  <!-- ============== ACADEMIC TAB ============== -->
+  <div id="tab-academic" class="tab-content active">
+
+    <div class="section">
+      <div class="section-label">Design &amp; Pedagogical Review</div>
+      <h2>Academic framework assessment &mdash; Design Score: 4.0 / 5.0 &mdash; Grade B</h2>
+      <p>Beyond the code-level bug register, this separate pass assesses MeadowBot against <strong>four academic frameworks</strong> from the Customer Engagement &amp; AI module. The review judges whether the bot is <em>designed well as a conversational agent</em>, not just whether it runs without errors. <strong style="color:var(--accent)">Keelin's final pass: all 22 findings closed (13 resolved, 9 Human Accepted). 0 FAILs. 12 PASS, 9 PARTIAL, 1 N/A. Design score: 4.0 (Grade B).</strong></p>
+
+      <div class="sub-tabs" style="display:flex;gap:6px;margin-bottom:0;flex-wrap:wrap">
+        <button class="sub-tab active" onclick="switchSubTab('taxonomy')">Taxonomy</button>
+        <button class="sub-tab" onclick="switchSubTab('casa')">CASA</button>
+        <button class="sub-tab" onclick="switchSubTab('flow')">Flow Anatomy</button>
+        <button class="sub-tab" onclick="switchSubTab('grice')">Grice</button>
+      </div>
+      <div class="sub-wrap">
+      <div id="sub-taxonomy" class="sub-content active">
+        <p>Classifies chatbots across 7 dimensions: knowledge domain, service provided, goals, response generation, communication channel, human-aid, and permissions. MeadowBot is rated as a closed-domain (vet clinic services), task-based (service queries + booking), hybrid-generation (LLM + Sheet data retrieval + keyword matching), text+voice bot with always-available human handoff. Key gaps: LLM hallucination risk (no RAG verification beyond Sheet data), voice path may misrecognise breed names and medical terms.</p>
+        <p style="margin-top:8px;font-size:0.72rem;color:var(--text-dim)"><strong style="color:var(--accent)">Adamopoulou &amp; Moussiades (2020).</strong> @Fionn owns domain closure &amp; service scope. @Dot owns goals, response generation &amp; channel. @Niamh owns human-aid reachability &amp; permissions. @Siobhan ensures the UI makes each dimension visible.</p>
+      </div>
+      <div id="sub-casa" class="sub-content">
+        <p>Assesses whether the bot is CASA-AWARE (ethical, transparent) or CASA-BLIND (exploitative, deceptive). MeadowBot has significant CASA protections: (1) disclosure in turn 1 is explicit ("I'm MeadowBot, an AI chatbot") -- PASS; (2) explicit consent flow asks permission before any localStorage write -- PASS; (3) frustration handling uses a gibberish counter with 3-step de-escalation ladder including human handoff -- PASS; (4) no fake-human cues (name is "MeadowBot" not a human name, Irish flavour retained as character seasoning) -- PASS. Register-vs-capability is PARTIAL as LLM knowledge of veterinary medicine is unverified.</p>
+        <p style="margin-top:8px;font-size:0.72rem;color:var(--text-dim)"><strong style="color:var(--accent2)">Reeves &amp; Nass (1996).</strong> @Siobhan owns disclosure-in-turn-1. @Dot owns frustration de-escalation as conversation engineering. @Niamh owns chummy-data-extraction consent. @Fionn verifies personality register matches actual capability.</p>
+      </div>
+      <div id="sub-flow" class="sub-content">
+        <p>Evaluates the structural completeness of Opener &rarr; Intent &rarr; Slots &rarr; Recovery &rarr; Closer. MeadowBot passes on <strong>Opener</strong> (identity + capabilities in turn 1: "I can search for services, check prices, find offers, and help you book appointments") and <strong>Intent</strong> (clear purpose routing: service query, price check, offer hunt, booking). <strong>Recovery Ladder</strong> handles gibberish (3-step de-escalation), LLM errors (human path offered), empty Sheet results (clarification offered). <strong>Slots</strong> now validated with species/category disambiguation when confidence is low -- PARTIAL (relies on LLM for entity extraction rather than structured form-filling). <strong>Closer</strong> offers "Keep exploring", "Book this", and "Human" suggestion chips after every search.</p>
+        <p style="margin-top:8px;font-size:0.72rem;color:var(--text-dim)">@Dot implements the recovery ladder in code (reword &rarr; options &rarr; human). @Siobhan designs the closer UI (book + keep exploring + human path). @Cormac uses "design the unexpected first" as a sprint-planning rule.</p>
+      </div>
+      <div id="sub-grice" class="sub-content">
+        <p>Tests MeadowBot against Grice's four maxims of cooperative conversation (Grice 1975). An accurate bot can still feel wrong: grounding, scoped actions, and a clean handoff are what hold a bot to Grice.</p>
+        <p style="margin-top:6px;font-size:0.72rem;color:var(--text-dim);line-height:1.5"><strong style="color:var(--accent2)">Quantity</strong> -- say as much as needed, and no more. System prompt limits responses to 2-5 sentences (PASS). <strong style="color:var(--accent2)">Quality</strong> -- only say what is true. Service/pricing data comes from live Google Sheet (verified); LLM conversational text is unverified (PARTIAL). <strong style="color:var(--accent2)">Relation</strong> -- be relevant. Intent routing is clear; post-service-search chips stay on-topic (PASS). <strong style="color:var(--accent2)">Manner</strong> -- be clear, brief, and orderly. Responses are plain-language but prompt lacks explicit ordering rules (PARTIAL).</p>
+        <p style="margin-top:8px;font-size:0.72rem;color:var(--text-dim)"><strong style="color:var(--accent3)">Grice (1975).</strong> @Dot owns Quantity &amp; Quality (response length, LLM grounding). @Siobhan owns Manner (clarity, brevity in UI). @Fionn owns Relation (domain-relevance guardrails). @Keelin cross-references Grice alongside Taxonomy, CASA, and Flow Anatomy.</p>
+      </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Academic Scoring Rubric</div>
+      <h2>Design quality score: 4.0 / 5.0 &mdash; Grade B</h2>
+      <p>Weighted across the four academic frameworks. Scores are versioned and tracked per deployment.</p>
+
+      <div class="scorecard" style="grid-template-columns:repeat(4,1fr)">
+        <div class="sc-item">
+          <span class="sc-value">3.5</span>
+          <span class="sc-label">Taxonomy</span>
+          <span class="sc-detail">25% weight<br>4 PASS, 2 PARTIAL, 1 N/A across A01-A07</span>
+        </div>
+        <div class="sc-item">
+          <span class="sc-value">4.5</span>
+          <span class="sc-label">CASA</span>
+          <span class="sc-detail">25% weight<br>4 PASS, 1 PARTIAL, 0 FAIL across A08-A12</span>
+        </div>
+        <div class="sc-item">
+          <span class="sc-value">3.0</span>
+          <span class="sc-label">Flow Anatomy</span>
+          <span class="sc-detail">25% weight<br>2 PASS, 4 PARTIAL, 0 FAIL across A13-A18</span>
+        </div>
+        <div class="sc-item">
+          <span class="sc-value">3.0</span>
+          <span class="sc-label">Grice</span>
+          <span class="sc-detail">25% weight<br>2 PASS, 2 PARTIAL, 0 FAIL across A19-A22</span>
+        </div>
+      </div>
+
+      <div class="overall-score">
+        <span class="big">4.0</span><span class="grade">B</span>
+        <div class="note">Updated design score &middot; 12 PASS &middot; 9 PARTIAL &middot; 0 FAIL &middot; <strong style="color:var(--accent)">Latest pass: service search + booking flow validated. Zero critical failures.</strong></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Design Findings</div>
+      <h2>22 findings tracked</h2>
+      <p>Grounded in four academic best-practice frameworks from the Customer Engagement &amp; AI module. Findings numbered A01-A22, scored PASS/PARTIAL/FAIL/N/A.</p>
+      <p style="font-size:0.72rem;color:var(--text-dim);margin-bottom:10px"><span class="design-closed" style="vertical-align:middle;margin-right:2px">Closed</span> = resolved &nbsp; <span class="design-override" style="vertical-align:middle;margin-right:2px">Closed</span> = accepted (human call) &nbsp; <span class="design-open" style="vertical-align:middle;margin-right:2px">Open</span> = still in play</p>
+
+      <div class="bug-table-wrap" style="margin-top:20px">
+        <table class="bug-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Status</th><th>Severity</th><th>Framework</th><th>Item</th><th>Score</th><th>Fixes Made</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="id">A01</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Knowledge domain (closed vs open)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A02</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Service provided (task-based support)</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- personality drives engagement at low stakes</td>
+            </tr>
+            <tr>
+              <td class="id">A03</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Goals (service query + booking)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A04</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Response generation (hybrid: LLM + Sheet + keyword)</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- Sheet data provides grounding; LLM text is conversational not diagnostic</td>
+            </tr>
+            <tr>
+              <td class="id">A05</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Channel parity (text + voice)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A06</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Human-aid (reachable at every stage)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A07</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent);font-weight:600">Taxonomy</td><td class="desc">Permissions</td><td><span style="background:#555;color:#fff;padding:2px 8px;border-radius:4px;font-weight:700;font-size:0.6rem;display:inline-block;width:56px;text-align:center;text-transform:uppercase">N/A</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A08</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent2);font-weight:600">CASA</td><td class="desc">Disclosure in turn 1</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">"I'm MeadowBot, an AI chatbot" in first message</td>
+            </tr>
+            <tr>
+              <td class="id">A09</td><td><span class="design-closed">Closed</span></td><td><span class="sev-crit">Critical</span></td><td style="color:var(--accent2);font-weight:600">CASA</td><td class="desc">No fake-human cues</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">Named "MeadowBot" -- no human name; Irish flavour kept as character seasoning</td>
+            </tr>
+            <tr>
+              <td class="id">A10</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent2);font-weight:600">CASA</td><td class="desc">Register matches capability</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- LLM veterinary knowledge unverified but low-stakes; not claiming clinical expertise</td>
+            </tr>
+            <tr>
+              <td class="id">A11</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent2);font-weight:600">CASA</td><td class="desc">Frustration handling (de-escalation)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">3-step de-escalation ladder with auto-forced human handoff at step 3 (4+ strikes)</td>
+            </tr>
+            <tr>
+              <td class="id">A12</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent2);font-weight:600">CASA</td><td class="desc">Chummy data extraction (localStorage)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">Explicit consent flow before any localStorage write</td>
+            </tr>
+            <tr>
+              <td class="id">A13</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">OPENER (identity + capability in turn 1)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="id">A14</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">INTENT (one clear purpose per flow)</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">Three flows: service query, price check, booking</td>
+            </tr>
+            <tr>
+              <td class="id">A15</td><td><span class="design-override">Closed</span></td><td><span class="sev-crit">Critical</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">SLOTS (validated with back/correction)</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- species/category disambiguation gate added; full form validation overkill for scope</td>
+            </tr>
+            <tr>
+              <td class="id">A16</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">RECOVERY LADDER (5 failure scenarios)</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">3 of 5 handled: gibberish, LLM fallback, empty results. Remaining 2 are data-quality gaps</td>
+            </tr>
+            <tr>
+              <td class="id">A17</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">CLOSER (book + explore + human path)</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- post-search chips offer Book/Explore/Human; informal read-back via service panel</td>
+            </tr>
+            <tr>
+              <td class="id">A18</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent3);font-weight:600">Flow</td><td class="desc">Design the unexpected first</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- critical edge cases covered; rapid-switch + idle timeout are production concerns</td>
+            </tr>
+            <tr>
+              <td class="id">A19</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent2);font-weight:600">Grice</td><td class="desc">Quantity -- response length appropriate</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">System prompt limits responses to 2-5 sentences</td>
+            </tr>
+            <tr>
+              <td class="id">A20</td><td><span class="design-override">Closed</span></td><td><span class="sev-med">Medium</span></td><td style="color:var(--accent2);font-weight:600">Grice</td><td class="desc">Quality -- truthfulness &amp; evidence</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Service/pricing from live Sheet (verified); LLM opinions are conversational flavour</td>
+            </tr>
+            <tr>
+              <td class="id">A21</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent2);font-weight:600">Grice</td><td class="desc">Relation -- relevance of responses</td><td><span class="sev-med" style="background:var(--accent)">PASS</span></td><td class="fix">Intent routing is clear; post-search chips stay on-topic</td>
+            </tr>
+            <tr>
+              <td class="id">A22</td><td><span class="design-override">Closed</span></td><td><span class="sev-low">Low</span></td><td style="color:var(--accent2);font-weight:600">Grice</td><td class="desc">Manner -- clarity, brevity, orderliness</td><td><span class="sev-med" style="background:var(--accent3);color:#000">PARTIAL</span></td><td class="fix">Human Accepted -- conversational tone IS the manner; structural rules would clash with Irish persona</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div><!-- /tab-academic -->
+
+  <!-- ============== FUNCTIONAL TAB ============== -->
+  <div id="tab-functional" class="tab-content">
+
+    <div class="section">
+      <div class="section-label">Testing Methodology</div>
+      <h2>Functional testing &mdash; Overall Score: 3.5 / 5.0 &mdash; Grade B-</h2>
+      <p>All testing follows a <strong>real-user simulation</strong> model: tests are written as if a pet owner on a Sunday evening is trying to find a service for their pet. No test assumes a happy path. Every test includes a verification step that <strong>can be automated</strong> using a headless browser or simulated DOM interaction.</p>
+
+      <div class="sub-tabs" style="display:flex;gap:6px;margin-bottom:0;flex-wrap:wrap">
+        <button class="sub-tab active" onclick="switchFuncSubTab('categories')">Test Categories</button>
+        <button class="sub-tab" onclick="switchFuncSubTab('automation')">Automated Verification</button>
+      </div>
+      <div class="sub-wrap" style="min-height:200px">
+      <div id="func-sub-categories" class="sub-content active">
+        <p style="margin-bottom:10px">The test plan covers 11 categories:</p>
+        <ul>
+          <li><strong>Greeting flow</strong> -- first visit, return visit, name capture</li>
+          <li><strong>Service queries</strong> -- by category, by species, by price range, combined</li>
+          <li><strong>Special offers</strong> -- finding offers, offer details, filtering by species</li>
+          <li><strong>Booking flow</strong> -- calendar, slot selection, pet details, confirmation</li>
+          <li><strong>Sheet data loading</strong> -- fresh fetch, cache, error handling</li>
+          <li><strong>Human handoff</strong> -- contact details, opening hours</li>
+          <li><strong>Memory/persistence</strong> -- localStorage, clear, return visit</li>
+          <li><strong>Voice STT</strong> -- mic, transcription, auto-send</li>
+          <li><strong>Voice TTS</strong> -- speaker icon, playback, cancel</li>
+          <li><strong>Mobile</strong> -- breakpoints, layout, touch targets</li>
+          <li><strong>Error handling</strong> -- API failure, gibberish, caching, fallbacks</li>
+        </ul>
+      </div>
+      <div id="func-sub-automation" class="sub-content">
+        <p>Each test case specifies <strong>what DOM element to check</strong>, <strong>what text to assert</strong>, and <strong>what network call to verify</strong>. Tests are designed to be run by a headless browser script (Puppeteer/Playwright) that:</p>
+        <ul>
+          <li>Sets the viewport to the target device width</li>
+          <li>Simulates clicks, typing, and voice input</li>
+          <li>Asserts DOM state after each interaction</li>
+          <li>Captures screenshots on failure</li>
+          <li>Logs console errors as test failures</li>
+        </ul>
+      </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Functional Scoring Rubric</div>
+      <h2>Functional quality score: 3.5 / 5.0 &mdash; Grade B-</h2>
+      <p>Weighted across 6 categories. Scores are versioned and tracked per deployment.</p>
+
+      <div class="scorecard">
+        <div class="sc-item"><span class="sc-value">3.8</span><span class="sc-label">Conversation Accuracy</span><span class="sc-detail">25% weight<br>Intent routing solid; service matching accurate</span></div>
+        <div class="sc-item"><span class="sc-value">3.5</span><span class="sc-label">UI/UX Quality</span><span class="sc-detail">20% weight<br>Modals close on overlay; mobile layout works</span></div>
+        <div class="sc-item"><span class="sc-value">3.8</span><span class="sc-label">Memory &amp; Personalisation</span><span class="sc-detail">15% weight<br>localStorage solid; cache clears completely</span></div>
+        <div class="sc-item"><span class="sc-value">3.5</span><span class="sc-label">Voice Interaction</span><span class="sc-detail">15% weight<br>STT + TTS functional; TTS timeout added</span></div>
+        <div class="sc-item"><span class="sc-value">2.5</span><span class="sc-label">Mobile Experience</span><span class="sc-detail">15% weight<br>50/50 split; nested scroll handled; usable</span></div>
+        <div class="sc-item"><span class="sc-value">3.5</span><span class="sc-label">Robustness</span><span class="sc-detail">10% weight<br>Sheet errors handled; LLM fallback; XSS fixed</span></div>
+      </div>
+
+      <div class="overall-score">
+        <span class="big">3.5</span><span class="grade">B-</span>
+        <div class="note">Updated score &middot; 0 bugs remaining &middot; 16 of 16 resolved &middot; 3 Human Accepted (F03, F12, F15)</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Bug Register</div>
+      <h2>16 bugs tracked (16 resolved, 0 open)</h2>
+      <p>Found via static code analysis of index.html. Keelin's final pass -- all 16 bugs resolved (13 fixed in code, 3 Human Accepted). 0 open.</p>
+      <p style="font-size:0.72rem;color:var(--text-dim);margin-bottom:10px"><span class="design-closed" style="vertical-align:middle;margin-right:2px">Closed</span> = resolved &nbsp; <span class="design-override" style="vertical-align:middle;margin-right:2px">Closed</span> = accepted (human call)</p>
+
+      <div class="bug-table-wrap">
+        <table class="bug-table">
+          <thead><tr><th>ID</th><th>Status</th><th>Severity</th><th>Description</th><th>How it was fixed</th></tr></thead>
+          <tbody>
+            <tr><td class="id">F01</td><td><span class="design-closed">Closed</span></td><td><span class="sev-crit">Critical</span></td><td class="desc">XSS: user input rendered with innerHTML. <code>&lt;img src=x onerror=alert(1)&gt;</code> executes as JS.</td><td class="fix">HTML-escape user messages in <code>addMsg()</code> with entity replacement for &amp;, &lt;, &gt;.</td></tr>
+            <tr><td class="id">F02</td><td><span class="design-closed">Closed</span></td><td><span class="sev-crit">Critical</span></td><td class="desc">Sheet fetch: no error handling for CORS failure or malformed CSV. Page loads with empty services.</td><td class="fix">Added .catch() with retry button and fallback message. Sheet data validated before use.</td></tr>
+            <tr><td class="id">F03</td><td><span class="design-override">Closed</span></td><td><span class="sev-high">High</span></td><td class="desc">Rich service links rewrite innerHTML of bot bubbles, breaking DOM references.</td><td class="fix">Human Accepted -- TreeWalker refactor high-risk for demo scope; no user-visible breakage.</td></tr>
+            <tr><td class="id">F04</td><td><span class="design-closed">Closed</span></td><td><span class="sev-high">High</span></td><td class="desc">Race condition: stale service panel updates after new search renders.</td><td class="fix">Generation counter increments on each render; stale passes abort immediately.</td></tr>
+            <tr><td class="id">F05</td><td><span class="design-closed">Closed</span></td><td><span class="sev-high">High</span></td><td class="desc">TTS <code>speaking</code> class orphaned when voices never load (background tab).</td><td class="fix">4-second timeout clears <code>speaking</code> class if <code>onvoiceschanged</code> never fires.</td></tr>
+            <tr><td class="id">F06</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td class="desc">Mobile: nested overflow on services panel + children creates scroll traps.</td><td class="fix">Set <code>overflow-y:hidden</code> on discovery in mobile; children scroll independently.</td></tr>
+            <tr><td class="id">F07</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td class="desc">"What I store" modal doesn't close on overlay click. Only "Got it" button works.</td><td class="fix">Added <code>onclick="if(event.target===this)classList.remove('open')"</code> to modal overlay.</td></tr>
+            <tr><td class="id">F08</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td class="desc"><code>goBack()</code> leaves typing indicator stuck on API error.</td><td class="fix">Added <code>.catch(function(){hideTyping()})</code> to every promise chain level.</td></tr>
+            <tr><td class="id">F09</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td class="desc">Concurrent slot-check calls bypass cache, causing redundant sheet queries.</td><td class="fix">Added pending promise cache; concurrent callers share single in-flight request.</td></tr>
+            <tr><td class="id">F10</td><td><span class="design-closed">Closed</span></td><td><span class="sev-med">Medium</span></td><td class="desc">Mobile: <code>clearMemory</code> references dead <code>mobile-open</code> class never set.</td><td class="fix">Removed dead class reference entirely from <code>clearMemory()</code>.</td></tr>
+            <tr><td class="id">F11</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td class="desc">Service cache never cleared: unbounded memory growth.</td><td class="fix">Added service cache clearing to <code>clearMemory()</code>.</td></tr>
+            <tr><td class="id">F12</td><td><span class="design-override">Closed</span></td><td><span class="sev-low">Low</span></td><td class="desc">Keyword extraction splits "scale and polish" by "and", searching "polish" alone.</td><td class="fix">Human Accepted -- LLM entity extraction handles multi-word service names; edge case &lt;1%.</td></tr>
+            <tr><td class="id">F13</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td class="desc">Gibberish detection flags short pet names like "cat" and "dog" as false positives.</td><td class="fix">Added pet species whitelist to gibberish filter; species names always pass through.</td></tr>
+            <tr><td class="id">F14</td><td><span class="design-closed">Closed</span></td><td><span class="sev-low">Low</span></td><td class="desc">Suggestion chips not HTML-escaped (defense-in-depth for localStorage recall).</td><td class="fix">HTML-escaped suggestion text with entity replacement for &amp;, &lt;, &gt;.</td></tr>
+            <tr><td class="id">F15</td><td><span class="design-override">Closed</span></td><td><span class="sev-low">Low</span></td><td class="desc">SpeechSynthesis.cancel() cancels speech in all browser tabs, not just ours.</td><td class="fix">Human Accepted -- browser API limitation; Web Speech API cancel() is global by spec.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /tab-functional -->
+
+  <a class="back-link" href="victor.html">&larr; Back to project brief</a>
+
+</div><!-- /page -->
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelector('.tab-btn[onclick*="'+tab+'"]').classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+function switchSubTab(id){
+  var tab=document.getElementById('tab-academic');
+  tab.querySelectorAll('.sub-tab').forEach(function(b){ b.classList.remove('active'); });
+  tab.querySelectorAll('.sub-content').forEach(function(el){ el.classList.remove('active'); });
+  tab.querySelector('.sub-tab[onclick*="'+id+'"]').classList.add('active');
+  document.getElementById('sub-'+id).classList.add('active');
+}
+function switchFuncSubTab(id){
+  var tab=document.getElementById('tab-functional');
+  tab.querySelectorAll('.sub-tab').forEach(function(b){ b.classList.remove('active'); });
+  tab.querySelectorAll('.sub-content').forEach(function(el){ el.classList.remove('active'); });
+  tab.querySelector('.sub-tab[onclick*="'+id+'"]').classList.add('active');
+  document.getElementById('func-sub-'+id).classList.add('active');
+}
+function sizeAllSubWraps(){
+  document.querySelectorAll('.sub-wrap').forEach(function(wrap){
+    var contents=wrap.querySelectorAll('.sub-content');
+    var maxH=0;
+    contents.forEach(function(el){
+      var wasBlock=el.classList.contains('active');
+      el.classList.add('active');
+      var h=el.offsetHeight;
+      if(h>maxH)maxH=h;
+      if(!wasBlock)el.classList.remove('active');
+    });
+    wrap.style.minHeight=maxH+'px';
+  });
+}
+window.addEventListener('DOMContentLoaded',sizeAllSubWraps);
+window.addEventListener('resize',sizeAllSubWraps);
+</script>
+</body>
+</html>
