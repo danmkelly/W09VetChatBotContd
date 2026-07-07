@@ -117,42 +117,44 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .d-content{display:flex;flex-direction:column;flex:1;min-height:0}
 
 /* Filter bar */
-.filter-bar{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex-shrink:0;background:var(--surface);position:sticky;top:0;z-index:5}
+.filter-bar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex-shrink:0;background:var(--surface);position:sticky;top:0;z-index:5}
 .filter-label{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-dim);margin-right:4px;white-space:nowrap}
-.filter-chip{padding:5px 12px;border-radius:14px;font-size:0.68rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim)}
-.filter-chip:hover{border-color:var(--accent);color:var(--text)}
-.filter-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.filter-chip.species-dog.active{background:#C4A44A;color:#000;border-color:#C4A44A}
-.filter-chip.species-cat.active{background:#8E6B9E;color:#fff;border-color:#8E6B9E}
-.filter-chip.species-rabbit.active{background:#6B9E8E;color:#fff;border-color:#6B9E8E}
-.filter-chip.species-offer{background:rgba(232,93,63,0.15);color:var(--accent2);border-color:rgba(232,93,63,0.3)}
-.filter-chip.species-offer.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
-.filter-chip.species-book{background:rgba(74,158,142,0.15);color:var(--accent);border-color:rgba(74,158,142,0.3)}
-.filter-chip.species-book.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.filter-results{font-size:0.62rem;color:var(--text-dim);margin-left:auto;white-space:nowrap}
+.filter-chip{padding:7px 14px;border-radius:16px;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);font-family:inherit;border:1.5px solid var(--border);background:var(--surface2);color:var(--text-dim);min-height:34px;display:inline-flex;align-items:center}
+.filter-chip:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.filter-chip.active{color:#fff;border-color:var(--accent);box-shadow:0 0 12px rgba(74,158,142,0.25)}
+.filter-chip.species-dog.active{background:#C4A44A;color:#000;border-color:#C4A44A;box-shadow:0 0 14px rgba(196,164,74,0.35)}
+.filter-chip.species-cat.active{background:#8E6B9E;color:#fff;border-color:#8E6B9E;box-shadow:0 0 14px rgba(142,107,158,0.35)}
+.filter-chip.species-rabbit.active{background:#6B9E8E;color:#fff;border-color:#6B9E8E;box-shadow:0 0 14px rgba(107,158,142,0.35)}
+.filter-chip.species-offer{background:rgba(232,93,63,0.12);color:var(--accent2);border-color:rgba(232,93,63,0.25)}
+.filter-chip.species-offer.active{background:var(--accent2);color:#fff;border-color:var(--accent2);box-shadow:0 0 14px rgba(232,93,63,0.35)}
+.filter-chip.species-book{background:rgba(74,158,142,0.12);color:var(--accent);border-color:rgba(74,158,142,0.25)}
+.filter-chip.species-book.active{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 0 14px rgba(74,158,142,0.35)}
+.filter-results{font-size:0.65rem;color:var(--text-dim);margin-left:auto;white-space:nowrap;background:var(--surface2);padding:4px 12px;border-radius:10px;font-weight:600;border:1px solid var(--border)}
+.filter-clear-btn{padding:7px 14px;border-radius:16px;font-size:0.65rem;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px dashed rgba(232,93,63,0.35);background:transparent;color:var(--accent2);transition:all .2s cubic-bezier(.4,0,.2,1);white-space:nowrap;margin-left:4px}.filter-clear-btn:hover{background:rgba(232,93,63,0.12);border-color:var(--accent2);border-style:solid}
 
 /* Service cards */
 .service-grid-wrap{flex:1;overflow-y:auto;padding:12px 20px 20px}
-.service-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
-.service-card{background:var(--surface2);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s;border:1px solid transparent;position:relative;overflow:hidden}
-.service-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3)}
-.service-card.expanded{border-color:var(--accent);box-shadow:0 6px 20px rgba(0,0,0,0.3)}
-.service-card-id{font-size:0.52rem;color:var(--text-dim);margin-bottom:4px;font-weight:600;letter-spacing:0.3px}
-.service-card-name{font-size:0.78rem;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px}
-.service-card-species{display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.55rem;font-weight:600;margin-bottom:6px;background:rgba(255,255,255,0.06);color:var(--text-dim)}
-.service-card-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px}
-.service-card-price{font-size:1rem;font-weight:800;color:var(--accent)}
-.service-card-duration{font-size:0.58rem;color:var(--text-dim)}
-.service-card-slots{font-size:0.58rem;color:var(--text-dim);margin-top:4px}
+.service-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.service-card{background:var(--surface2);border-radius:10px;padding:16px;cursor:pointer;transition:all .3s cubic-bezier(.4,0,.2,1);border:1px solid transparent;position:relative;overflow:hidden}
+.service-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,0.35);background:linear-gradient(145deg,var(--surface2) 60%,rgba(74,158,142,0.12) 100%)}
+.service-card.expanded{border-color:var(--accent);box-shadow:0 10px 28px rgba(0,0,0,0.35);background:linear-gradient(145deg,var(--surface2) 60%,rgba(74,158,142,0.08) 100%)}
+.service-card-id{font-size:0.52rem;color:var(--text-dim);margin-bottom:6px;font-weight:600;letter-spacing:0.3px;text-transform:uppercase;opacity:0.6}
+.service-card-name{font-size:0.85rem;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px;letter-spacing:0.2px}
+.service-card-species{display:inline-block;padding:3px 10px;border-radius:8px;font-size:0.55rem;font-weight:600;margin-bottom:6px;background:rgba(255,255,255,0.08);color:var(--text-dim)}
+.service-card-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}
+.service-card-price{font-size:1.2rem;font-weight:800;color:var(--accent);text-shadow:0 0 12px rgba(74,158,142,0.25)}
+.service-card-duration{font-size:0.6rem;color:var(--text-dim);font-weight:500}
+.service-card-slots{font-size:0.6rem;color:var(--text-dim);margin-top:6px;font-weight:500}
 .service-card-slots strong{color:var(--text)}
-.service-offer-badge{position:absolute;top:8px;right:8px;background:var(--accent2);color:#fff;font-size:0.52rem;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.3px}
-.service-book-btn{display:none;width:100%;margin-top:10px;padding:8px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-size:0.72rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;letter-spacing:0.3px}
-.service-book-btn:hover{background:#3A8E7E}
-.service-card.expanded .service-book-btn{display:block}
-.service-details{display:none;margin-top:10px;font-size:0.62rem;color:var(--text-dim);line-height:1.5;padding-top:8px;border-top:1px solid var(--border)}
-.service-card.expanded .service-details{display:block}
-.service-details strong{color:var(--text)}
-.service-availability{font-size:0.58rem;color:var(--text-dim);margin-top:4px}
+.service-offer-badge{position:absolute;top:8px;right:8px;background:var(--accent2);color:#fff;font-size:0.54rem;font-weight:700;padding:4px 9px;border-radius:5px;text-transform:uppercase;letter-spacing:0.5px;animation:offerPulse 2.5s ease-in-out infinite;z-index:1;box-shadow:0 2px 8px rgba(232,93,63,0.4)}
+.service-book-btn{max-height:0;overflow:hidden;opacity:0;width:100%;margin-top:0;padding:0 8px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-size:0.74rem;font-weight:700;cursor:pointer;font-family:inherit;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .3s ease,margin .3s ease,padding .3s ease;letter-spacing:0.5px}
+.service-book-btn:hover{background:#3A8E7E;transform:scale(1.02)}
+.service-card.expanded .service-book-btn{max-height:44px;opacity:1;margin-top:12px;padding:10px 8px}
+.service-details{max-height:0;overflow:hidden;opacity:0;margin-top:0;font-size:0.65rem;color:var(--text-dim);line-height:1.6;padding-top:0;border-top:0 solid transparent;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .3s ease,margin .3s ease,padding .3s ease,border .3s ease}
+.service-card.expanded .service-details{max-height:300px;opacity:1;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+.service-details strong{color:var(--text);font-weight:600}
+.service-availability{font-size:0.6rem;color:var(--text-dim);margin-top:6px;font-style:italic}
+@keyframes offerPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,93,63,0.5)}50%{box-shadow:0 0 0 10px rgba(232,93,63,0)}}
 
 /* Calendar modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
@@ -282,8 +284,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <button class="filter-chip species-dog active" onclick="toggleSpecies('dog',this)">&#128054; Dog</button>
         <button class="filter-chip species-cat active" onclick="toggleSpecies('cat',this)">&#128049; Cat</button>
         <button class="filter-chip species-rabbit active" onclick="toggleSpecies('rabbit',this)">&#128007; Rabbit</button>
-        <button class="filter-chip active" onclick="toggleSpecies('small mammal',this)">&#128059; Small</button>
-        <button class="filter-chip active" onclick="toggleSpecies('bird',this)">&#128038; Bird</button>
+        <button class="filter-chip species-smallmammal active" onclick="toggleSpecies('small mammal',this)">&#128059; Small</button>
+        <button class="filter-chip species-bird active" onclick="toggleSpecies('bird',this)">&#128038; Bird</button>
         <span class="filter-label" style="margin-left:8px">Extras:</span>
         <button class="filter-chip species-offer" onclick="toggleOffersOnly()">&#127873; Offers</button>
         <button class="filter-chip species-book" onclick="toggleBookable()">&#128197; Bookable</button>
@@ -345,13 +347,14 @@ var bookableOnly=false;
 // === State ===
 var conv=[],gibberishCount=0,expectingName=false,expectingConsent=false,expectingHumanBot=false;
 var currentQuery="",spokeLast=false,lastBotAsked=false;
+function escHtml(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 
 // === Memory ===
 var memory={visits:0,lastVisit:"",recentSearches:[],recentCategories:[],userName:"",petName:"",consent:""};
 function loadMemory(){
   try{var raw=localStorage.getItem("meadow_memory");if(raw){var p=JSON.parse(raw);memory=p}}catch(e){}
   memory.consent=memory.consent||"";
-  if(memory.consent!=="no"){
+  if(memory.consent==="yes"){
     memory.visits=(memory.visits||0)+1;
     memory.lastVisit=new Date().toISOString();
     memory.recentSearches=memory.recentSearches||[];
@@ -406,7 +409,17 @@ function addMsg(t,s){
 }
 function addSugg(arr){
   var d=document.createElement("div");d.className="msg bot";
-  d.innerHTML='<div class="chat-sugg">'+arr.map(function(x){return'<span class="chat-sugg-btn" onclick="qa(\''+x.replace(/'/g,"\\'")+'\')">'+x.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")+'</span>'}).join("")+'</div>';
+  var wrap=document.createElement("div");wrap.className="chat-sugg";
+  arr.forEach(function(x){
+    var btn=document.createElement("span");
+    btn.className="chat-sugg-btn";
+    btn.tabIndex=0;btn.setAttribute("role","button");
+    btn.textContent=x;
+    btn.addEventListener("click",function(){qa(x)});
+    btn.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();qa(x)}});
+    wrap.appendChild(btn);
+  });
+  d.appendChild(wrap);
   chatMsgs.appendChild(d);sc();
 }
 function showTyping(){var d=document.createElement("div");d.className="msg bot";d.innerHTML='<div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';d.id="t";chatMsgs.appendChild(d);sc()}
@@ -460,7 +473,7 @@ function speakMsg(btn){
     window.speechSynthesis.speak(u);
   }
   if(window.speechSynthesis.getVoices().length===0){
-    var voiceTimeout=setTimeout(function(){btn.classList.remove("speaking")},4000);
+    var voiceTimeout=setTimeout(function(){btn.classList.remove("speaking");doSpeak(text)},4000);
     window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.onvoiceschanged=null;clearTimeout(voiceTimeout);doSpeak(text)};
   }else{doSpeak(text)}
 }
@@ -481,27 +494,36 @@ function parseCSVLine(line){
   var result=[],current="",inQuotes=false;
   for(var i=0;i<line.length;i++){
     var c=line[i];
-    if(c==='"'){inQuotes=!inQuotes}
+    if(c==='"'){
+      if(inQuotes&&line[i+1]==='"'){current+='"';i++;}
+      else{inQuotes=!inQuotes}
+    }
     else if(c===','&&!inQuotes){result.push(current.trim());current=""}
     else{current+=c}
   }
   result.push(current.trim());
   return result;
 }
-async function fetchServices(){
+async function fetchServices(retries){
+  retries=retries||2;
   document.getElementById("loadingOverlay").classList.add("active");
-  try{
-    var r=await fetch(SHEET_CSV);
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    var csv=await r.text();
-    allServices=parseCSV(csv);
-    filteredServices=allServices.slice();
-    document.getElementById("loadingOverlay").classList.remove("active");
-    return true;
-  }catch(e){
-    document.getElementById("loadingOverlay").classList.remove("active");
-    addMsg("I'm having trouble loading our service catalogue right now. Please try refreshing the page, or type <strong>human</strong> to speak to our team directly.",'bot');
-    return false;
+  for(var attempt=0;attempt<=retries;attempt++){
+    try{
+      var r=await fetch(SHEET_CSV);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      var csv=await r.text();
+      allServices=parseCSV(csv);
+      filteredServices=allServices.slice();
+      document.getElementById("loadingOverlay").classList.remove("active");
+      return true;
+    }catch(e){
+      if(attempt===retries){
+        document.getElementById("loadingOverlay").classList.remove("active");
+        addMsg("I'm having trouble loading our service catalogue right now. Please try refreshing the page, or type <strong>human</strong> to speak to our team directly.",'bot');
+        return false;
+      }
+      await new Promise(function(res){setTimeout(res,Math.pow(2,attempt)*1000)});
+    }
   }
 }
 
@@ -569,7 +591,7 @@ function enrichLinks(html){
   names.forEach(function(n){
     if(!n||n.length<2)return;
     var rx=new RegExp('(^|\\s|>)('+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')(?=[\\s,.\!?;:<]|$)','gi');
-    html=html.replace(rx,function(m,p1,p2){return p1+'<span class="chat-link" onclick="qa(\''+p2.replace(/'/g,"\\'")+'\')">'+p2+'</span>'});
+    html=html.replace(rx,function(m,p1,p2){return p1+'<span class="chat-link" data-query="'+p2.replace(/"/g,'&quot;').replace(/'/g,'&#39;')+'">'+p2+'</span>'});
   });
   return html;
 }
@@ -664,9 +686,9 @@ function openBooking(id,name,price,duration,availability){
   selectedDate=null;selectedTime=null;
   var days=getWeekDays();
   document.getElementById("bookingModalInner").innerHTML=
-    '<h3>&#128197; Book: '+name+'</h3>'+
-    '<div class="modal-subtitle">&euro;'+price+' &middot; '+duration+' min &middot; '+availability+'</div>'+
-    '<div class="modal-field"><label>Pick a day</label><div class="day-picker" id="dayPicker">'+days.map(function(d,i){return'<button class="day-btn'+(i===0?' active':'')+(d.weekend?'':'')+'" onclick="selectDay('+i+',this)"><span class="day-name">'+d.day+'</span>'+d.date+'</button>'}).join("")+'</div></div>'+
+    '<h3>&#128197; Book: '+escHtml(name)+'</h3>'+
+    '<div class="modal-subtitle">&euro;'+escHtml(price)+' &middot; '+escHtml(duration)+' min &middot; '+escHtml(availability)+'</div>'+
+    '<div class="modal-field"><label>Pick a day</label><div class="day-picker" id="dayPicker">'+days.map(function(d,i){return'<button class="day-btn'+(i===0?' active':'')+(d.weekend?'':'')+'" onclick="selectDay('+i+',this)"><span class="day-name">'+escHtml(d.day)+'</span>'+escHtml(d.date)+'</button>'}).join("")+'</div></div>'+
     '<div class="modal-field"><label>Pick a time</label><div class="time-slots" id="timeSlots"></div></div>'+
     '<div class="modal-field"><label>Your name</label><input id="bookName" placeholder="Your full name"></div>'+
     '<div class="modal-field"><label>Pet name</label><input id="bookPetName" placeholder="Your pet\'s name"></div>'+
@@ -722,7 +744,7 @@ function submitBooking(){
   memory.petName=petName;saveMemory();
   console.log("[Booking]",{service:selectedService,day:dayInfo,time:selectedTime,name:name,pet:petName});
   document.getElementById("bookingModalInner").innerHTML=
-    '<div class="modal-done"><div class="modal-done-icon">&#9989;</div><p>Thanks, <strong>'+name+'</strong>!</p><p style="margin-top:8px">We\'ve received your booking request for:</p><p style="margin-top:4px"><strong>'+selectedService.name+'</strong><br>'+dayInfo.day+' '+dayInfo.date+' at '+selectedTime+'<br>Pet: '+petName+' &middot; &euro;'+selectedService.price+'</p><p style="margin-top:8px;font-size:0.75rem">We\'ll call you within 4 hours to confirm. No payment needed until then.</p><button class="modal-btn modal-btn-submit" style="width:100%;margin-top:16px" onclick="closeBooking()">Got it</button></div>';
+    '<div class="modal-done"><div class="modal-done-icon">&#9989;</div><p>Thanks, <strong>'+escHtml(name)+'</strong>!</p><p style="margin-top:8px">We\'ve received your booking request for:</p><p style="margin-top:4px"><strong>'+escHtml(selectedService.name)+'</strong><br>'+escHtml(dayInfo.day)+' '+escHtml(dayInfo.date)+' at '+escHtml(selectedTime)+'<br>Pet: '+escHtml(petName)+' &middot; &euro;'+escHtml(selectedService.price)+'</p><p style="margin-top:8px;font-size:0.75rem">We\'ll call you within 4 hours to confirm. No payment needed until then.</p><button class="modal-btn modal-btn-submit" style="width:100%;margin-top:16px" onclick="closeBooking()">Got it</button></div>';
 }
 function closeBooking(){document.getElementById("bookingModal").classList.remove("open");selectedService=null;selectedDate=null;selectedTime=null}
 
@@ -731,6 +753,7 @@ async function send(){
   var txt=chatInput.value.trim();if(!txt)return;
   addMsg(txt,"user");chatInput.value="";showTyping();
   currentQuery=txt;
+  try{
 
   if(txt==="CLS"){hideTyping();clearMemory();return;}
 
@@ -765,7 +788,7 @@ async function send(){
       addSugg(["Dog services","Cat dental","Microchip offers","Telehealth","Emergency","Human"]);
       lastBotAsked=true;return;
     }
-    if(hb==="human"){expectingConsent=false;hideTyping();showHuman();return}
+    if(S(txt)==="human"){expectingConsent=false;hideTyping();showHuman();return}
     hideTyping();
     addMsg("Just a simple <strong>yes</strong> or <strong>no</strong> -- would you like me to remember you between visits?",'bot');
     addSugg(["Yes","No"]);
@@ -853,14 +876,12 @@ async function send(){
     document.querySelectorAll(".filter-chip.species-offer,.filter-chip.species-book").forEach(function(b){b.classList.remove("active")});
     document.querySelectorAll(".filter-chip").forEach(function(b){
       b.classList.remove("active");
-      if(b.classList.contains("species-"+S(results[0].species).replace(/\s/g,'')))b.classList.add("active");
+      activeSpecies.forEach(function(sp){
+        var cls="species-"+sp.replace(/\s/g,'');
+        if(b.classList.contains(cls))b.classList.add("active");
+      });
     });
     renderServices();
-    // Re-sync species filter buttons
-    document.querySelectorAll(".filter-chip").forEach(function(b){
-      if(!b.classList.contains("species-offer")&&!b.classList.contains("species-book"))b.classList.add("active");
-    });
-    activeSpecies=["dog","cat","rabbit","small mammal","bird"];
 
     // Track search
     if(kw.categories.length>0)kw.categories.forEach(function(c){memory.recentCategories.unshift(c);if(memory.recentCategories.length>5)memory.recentCategories.pop()});
@@ -870,11 +891,17 @@ async function send(){
 
   // Post-search suggestion chips
   setTimeout(function(){addSugg(["Keep exploring","Book an appointment","Human"])},3000);
+  }catch(e){
+    console.error("[Bot] send() crash:",e);
+    hideTyping();
+    addMsg("Something went wrong on my end. Could you try again, or type human to speak to our team?",'bot');
+  }
 }
 
 // === Init ===
 document.getElementById("chatSend").addEventListener("click",send);
 chatInput.addEventListener("keydown",function(e){if(e.key==="Enter")send()});
+chatMsgs.addEventListener("click",function(e){var link=e.target.closest(".chat-link");if(link&&link.dataset.query)qa(link.dataset.query)});
 (function(){
   var b=document.getElementById("botBadge"),l=document.getElementById("botLabel");
   if(LLM_KEY&&LLM_URL&&LLM_MODEL){b.textContent="LLM Enabled";b.classList.add("live");l.textContent="Vet assistant &middot; AI-powered"}
@@ -902,7 +929,7 @@ chatInput.addEventListener("keydown",function(e){if(e.key==="Enter")send()});
         addSugg(["Bot","Human"]);
       },1200);
     }
-  });
+  }).catch(function(e){console.error("[Bot] init fetchServices fail:",e)});
 })();
 </script>
 </body>
