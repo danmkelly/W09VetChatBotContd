@@ -349,8 +349,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 <script src="config.js"></script>
 <script>
 // === API Proxy ===
-var API_PROXY="";
-// Example after deploy: var API_PROXY="https://meadow-vet-proxy.your-subdomain.workers.dev";
+var API_PROXY="https://meadow-vet-proxy.dan-m-kelly.workers.dev";
 
 // === Key setup ===
 (function(){
@@ -724,7 +723,7 @@ function getMemoryPreamble(){
 function ordinalSuffix(n){var s=["th","st","nd","rd"];var v=n%100;return s[(v-20)%10]||s[v]||s[0]}
 
 async function chatLLM(msg,dataMsg){
-  if(!LLM_KEY)return null;
+  if(!LLM_KEY&&!API_PROXY)return null;
   var msgs=[{role:"system",content:getMemoryPreamble()+BOT_VOICE}];
   for(var i=0;i<conv.length;i++)msgs.push(conv[i]);
   if(dataMsg)msgs.push({role:"user",content:dataMsg});
@@ -993,7 +992,7 @@ chatInput.addEventListener("keydown",function(e){if(e.key==="Enter")send()});
 chatMsgs.addEventListener("click",function(e){var link=e.target.closest(".chat-link");if(link&&link.dataset.query)qa(link.dataset.query)});
 (function(){
   var b=document.getElementById("botBadge"),l=document.getElementById("botLabel");
-  if(LLM_KEY&&LLM_URL&&LLM_MODEL){b.textContent="LLM Enabled";b.classList.add("live");l.textContent="Vet assistant &middot; AI-powered"}
+  if(LLM_KEY&&LLM_URL&&LLM_MODEL||API_PROXY){b.textContent="LLM Enabled";b.classList.add("live");l.textContent="Vet assistant &middot; AI-powered"}
   else{b.textContent="LLM Not Live";l.textContent="Vet clinic assistant"}
 
   loadMemory();
