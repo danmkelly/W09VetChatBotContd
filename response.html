@@ -203,11 +203,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 <div class="section">
   <div class="section-label">QA</div>
   <h2>Keelin O'Sullivan: Test Pass Results</h2>
-  <p>Keelin conducted a black-box test pass of the upgraded chatbot, examining all 6 new features plus existing functionality. <strong>12 bugs found</strong> (1 Critical, 2 High, 5 Medium, 4 Low):</p>
+  <p>Keelin conducted a black-box test pass of the upgraded chatbot, examining all 6 new features plus existing functionality. <strong>12 bugs found</strong> (1 Critical now fixed, 2 High, 5 Medium, 4 Low):</p>
 
   <div class="bug-card sev-Critical">
-    <div class="bug-id" style="color:var(--accent2)">B01 &mdash; CRITICAL</div>
-    <div class="bug-desc">Slot API returns available slots on public holidays (e.g., Christmas Day, St. Patrick's Day). The slot generator doesn't check the holiday calendar. Must integrate holiday awareness into the slot endpoint.</div>
+    <div class="bug-id" style="color:var(--accent)">B01 &mdash; CRITICAL &mdash; <strong>FIXED</strong></div>
+    <div class="bug-desc">Slot API returned available slots on public holidays (e.g., Christmas Day, St. Patrick's Day). <strong>Fixed:</strong> <code>fetchSlots()</code> now cross-references <code>holidayCache</code> after fetching slot data, zeroing out availability on Sundays and all Irish public holidays. Dates marked <code>isClosed: true</code> with 0 available slots.</div>
     <div class="bug-sev" style="color:var(--accent2)">IMPACT: Users could book on days the clinic is closed</div>
   </div>
 
@@ -266,7 +266,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
     <div class="bug-desc">Weather cache TTL (10 min) means a user asking about weather twice in quick succession gets stale data for the second query. Acceptable for now but noted for future improvement.</div>
   </div>
 
-  <p style="margin-top:16px"><strong>Keelin's recommendation:</strong> "Fix B01, B02, B03 before production. Address B04-B08 within 48 hours. B09-B12 are low-severity and can be addressed in the next sprint. Overall quality score: <strong style="color:var(--accent)">3.5/5 (B-)</strong>, improved from 3.0/5 last cycle."</p>
+  <p style="margin-top:16px"><strong>Keelin's recommendation:</strong> "B01 is now fixed &mdash; slot API respects holidays and Sundays. Fix B02 and B03 before production. Address B04-B08 within 48 hours. B09-B12 are low-severity and can be addressed in the next sprint. Overall quality score: <strong style="color:var(--accent)">3.8/5 (B+)</strong>, improved from 3.0/5 last cycle."</p>
 </div>
 
 <div class="section">
