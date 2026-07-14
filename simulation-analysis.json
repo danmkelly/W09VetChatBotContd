@@ -1,0 +1,44 @@
+{
+  "totalUsers": 400,
+  "npsScore": 6,
+  "promoters": 151,
+  "passives": 122,
+  "detractors": 127,
+  "avgNps": 7.4,
+  "topFeatureRequests": [
+    {
+      "theme": "Grooming booking integration",
+      "count": 40
+    },
+    {
+      "theme": "Multi-pet management",
+      "count": 40
+    },
+    {
+      "theme": "Breed-specific care guides",
+      "count": 20
+    },
+    {
+      "theme": "Real-time live slot availability",
+      "count": 20
+    },
+    {
+      "theme": "Clinic wait time estimates",
+      "count": 20
+    },
+    {
+      "theme": "Video consultations / telehealth",
+      "count": 20
+    },
+    {
+      "theme": "Price estimator / cost calculator",
+      "count": 20
+    }
+  ],
+  "topPainPoints": [
+    {
+      "theme": "Confusing or hard to use",
+      "count": 80
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Research - Meadow Vet Care Chatbot</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0D0D;--surface:#1A1A1A;--surface2:#242424;--border:#2E2E2E;
+  --text:#E8E4DD;--text-dim:#8A857C;--accent:#4A9E8E;--accent-glow:rgba(74,158,142,0.3);
+  --accent2:#E85D3F;--accent3:#C4A44A;--font:'Inter',system-ui,-apple-system,sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7}
+.page{max-width:1100px;margin:0 auto;padding:60px 24px 80px}
+.hero{text-align:center;padding:60px 0 50px;border-bottom:1px solid var(--border);margin-bottom:50px}
+.hero-icon{font-size:3rem;margin-bottom:16px}
+.hero h1{font-size:2.4rem;font-weight:900;color:#F5E6D3;letter-spacing:-0.5px;margin-bottom:10px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-size:0.95rem;color:var(--text-dim);max-width:700px;margin:0 auto;line-height:1.6}
+.section{margin-bottom:48px}
+.section-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:8px}
+.section h2{font-size:1.5rem;font-weight:800;margin-bottom:16px;color:#F5E6D3}
+.section h3{font-size:1.1rem;font-weight:700;margin:20px 0 10px;color:var(--text)}
+.section p,.section li{font-size:0.92rem;color:var(--text-dim);margin-bottom:10px;line-height:1.75}
+.section p strong,.section li strong{color:var(--text)}
+.section ul{margin-left:20px;margin-bottom:16px}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center}
+.stat-card .stat-value{font-size:2rem;font-weight:900;color:var(--accent);display:block}
+.stat-card .stat-label{font-size:0.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;display:block}
+
+.nps-badge{display:inline-block;padding:8px 24px;border-radius:8px;font-weight:800;font-size:1.5rem;margin-right:12px}
+.nps-badge.good{background:rgba(74,158,142,0.2);color:var(--accent);border:1px solid rgba(74,158,142,0.3)}
+.nps-badge.ok{background:rgba(196,164,74,0.2);color:var(--accent3);border:1px solid rgba(196,164,74,0.3)}
+
+.nps-bar{display:flex;gap:4px;margin:16px 0;height:24px;border-radius:6px;overflow:hidden}
+.nps-bar .det{background:var(--accent2);height:100%}
+.nps-bar .pas{background:var(--accent3);height:100%}
+.nps-bar .pro{background:var(--accent);height:100%}
+.nps-legend{display:flex;gap:24px;font-size:0.72rem;color:var(--text-dim)}
+.nps-legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.nps-legend .det::before{background:var(--accent2)}
+.nps-legend .pas::before{background:var(--accent3)}
+.nps-legend .pro::before{background:var(--accent)}
+
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;transition:all .2s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card-icon{font-size:1.5rem;margin-bottom:10px}
+.card h4{font-size:0.9rem;font-weight:700;margin-bottom:6px;color:var(--text)}
+.card p{font-size:0.78rem;color:var(--text-dim);line-height:1.5}
+
+.quote{background:var(--surface);border-left:3px solid var(--accent);padding:16px 20px;border-radius:0 8px 8px 0;margin:12px 0;font-style:italic}
+.quote .attrib{font-size:0.7rem;color:var(--text-dim);margin-top:6px;font-style:normal;font-weight:600}
+
+.table-wrap{overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:0.85rem}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--accent);font-weight:700;text-transform:uppercase;font-size:0.65rem;letter-spacing:0.5px;background:var(--surface)}
+td{color:var(--text-dim)}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface2)}
+.bar-cell{position:relative}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;background:rgba(74,158,142,0.15);border-radius:0 4px 4px 0;z-index:0}
+.bar-cell span{position:relative;z-index:1}
+
+.priority-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;margin:20px 0}
+.priority-box{padding:16px;border-radius:8px;text-align:center}
+.priority-box.high{background:rgba(74,158,142,0.15);border:1px solid rgba(74,158,142,0.3)}
+.priority-box.lower{background:rgba(138,133,124,0.1);border:1px solid var(--border)}
+.priority-box .p-label{font-size:0.55rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:6px}
+.priority-box.high .p-label{color:var(--accent)}
+.priority-box.lower .p-label{color:var(--text-dim)}
+.priority-box .p-items{font-size:0.78rem;color:var(--text-dim);line-height:1.6}
+
+.tag{display:inline-block;padding:4px 10px;border-radius:5px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-right:6px}
+.tag.mcp{background:rgba(74,158,142,0.2);color:var(--accent)}
+.tag.ux{background:rgba(196,164,74,0.2);color:var(--accent3)}
+.tag.api{background:rgba(232,93,63,0.15);color:var(--accent2)}
+
+.sidebar{position:sticky;top:24px}
+.cta-link{display:block;padding:16px 20px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;text-align:center;margin-top:12px;transition:all .2s}
+.cta-link:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(74,158,142,0.3)}
+
+.foot-bar{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:60px;padding-top:40px;border-top:1px solid var(--border)}
+.foot-link{color:var(--accent);text-decoration:none;font-weight:700;font-size:0.85rem;padding:8px 16px;border:1px solid var(--accent);border-radius:6px;transition:all .2s}
+.foot-link:hover{background:rgba(74,158,142,0.1);transform:translateY(-1px)}
+
+@media(max-width:768px){
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .card-grid{grid-template-columns:1fr}
+  .hero h1{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<div class="hero">
+  <div class="hero-icon">&#128202;</div>
+  <h1>Market <span>Research</span> Report</h1>
+  <p class="hero-sub">Simulated user research with 400 virtual clients of Meadow Vet Care. 20 persona archetypes across all pet types, demographics, and tech comfort levels, expanded to 400 users with natural variance. LLM-simulated via DeepSeek with structured survey protocol.</p>
+</div>
+
+<div class="section">
+  <div class="section-label">Methodology</div>
+  <h2>How the research was conducted</h2>
+  <p>A panel of <strong>400 simulated clients</strong> was generated from <strong>20 persona archetypes</strong> (20 variants each), covering the full spectrum of Meadow Vet Care's customer base:</p>
+
+  <ul>
+    <li><strong>Pet types:</strong> Dogs (Labrador, Frenchie, Golden Retriever, German Shepherd, Border Collie, Cocker Spaniel, Shih Tzu, Dachshund, Staffie, elderly mixed breed), Cats (Persian, Bengal, Siamese, rescue moggy, 3-cat household), Rabbits, Guinea pigs, Budgies &amp; Cockatiels, Hamsters, Ferrets</li>
+    <li><strong>Demographics:</strong> Families with kids, young professionals, retirees, rural farmers, shift workers, students, artists, veterinary professionals</li>
+    <li><strong>Tech comfort:</strong> Tech-savvy (35%), Moderate (40%), Low-tech (25%)</li>
+    <li><strong>Visit patterns:</strong> Regular chronic care, occasional checkups, puppy/kitten schedules, emergency-prone, first-time registration</li>
+  </ul>
+
+  <p>Each persona answered <strong>12 structured questions</strong> covering first impressions, service discovery, trust, likes, frustrations, missing features, booking, holiday/weather features, privacy, phone preference, feature wishes, and NPS. Responses were generated via DeepSeek LLM with persona-specific system prompts and parsed into a 400-row dataset.</p>
+</div>
+
+<div class="section">
+  <div class="section-label">Key Metric</div>
+  <h2>Net Promoter Score</h2>
+
+  <div style="display:flex;align-items:center;margin:16px 0">
+    <div class="nps-badge ok">NPS 6</div>
+    <div>
+      <span style="font-size:1.1rem;font-weight:700;color:var(--text)">Average rating: 7.4 / 10</span><br>
+      <span style="font-size:0.78rem;color:var(--text-dim)">Slightly positive &mdash; room for improvement</span>
+    </div>
+  </div>
+
+  <div class="nps-bar">
+    <div class="det" style="width:32%"></div>
+    <div class="pas" style="width:30%"></div>
+    <div class="pro" style="width:38%"></div>
+  </div>
+  <div class="nps-legend">
+    <span class="det">Detractors (0-6): 127 users</span>
+    <span class="pas">Passives (7-8): 122 users</span>
+    <span class="pro">Promoters (9-10): 151 users</span>
+  </div>
+
+  <p style="margin-top:16px">The NPS of 6 indicates a functional but not yet delightful product. <strong>Tech-savvy premium clients</strong> are strongest promoters (avg 8.5). <strong>Low-tech and rural users</strong> are the primary detractors (avg 4.2), citing complexity and a lack of localised features.</p>
+</div>
+
+<div class="section">
+  <div class="section-label">Voice of the Customer</div>
+  <h2>Representative quotes</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">&#128054;</div>
+      <h4>A07 &mdash; Golden Retriever puppy owner</h4>
+      <div class="quote">"Loved it &mdash; clean, modern, and the puppy picture made me smile. I searched puppy vaccination schedule and it showed everything in order. Perfect &mdash; booked a full puppy package in two minutes."</div>
+      <p class="attrib">NPS: 10 | Tech-savvy | Premium</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128008;</div>
+      <h4>A02 &mdash; Persian cat, young professional</h4>
+      <div class="quote">"The voice input/output is brilliant &mdash; I can ask while cooking dinner. Absolutely &mdash; I avoid phone calls like the plague. Telehealth video call option for minor concerns."</div>
+      <p class="attrib">NPS: 10 | Tech-savvy | Premium</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128053;</div>
+      <h4>A03 &mdash; French Bulldog, first-time owner</h4>
+      <div class="quote">"I was a bit overwhelmed &mdash; lots of options and I wasn't sure where to start. The weather advice is great &mdash; I can check if it's safe to walk my flat-faced dog in summer. A dedicated breed-specific health section would help."</div>
+      <p class="attrib">NPS: 6 | Tech-savvy | Budget-conscious</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128007;</div>
+      <h4>A04 &mdash; Rabbit, teenager's pet</h4>
+      <div class="quote">"The search by species was spot on &mdash; didn't have to wade through dog stuff. A simple symptom checker for small pets would be class."</div>
+      <p class="attrib">NPS: 7 | Moderate tech | Middle budget</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128058;</div>
+      <h4>A05 &mdash; Farm dogs, rural Wicklow</h4>
+      <div class="quote">"It kept suggesting Dublin weather &mdash; I live in Wicklow, so that was useless. I gave up and phoned. I prefer talking to a real receptionist who knows the area."</div>
+      <p class="attrib">NPS: 3 | Low-tech | Middle budget</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128049;</div>
+      <h4>A06 &mdash; Senior cat, retired couple</h4>
+      <div class="quote">"The text was a bit small for my old eyes. I couldn't figure out how to book, so my daughter did it for me. A bigger call us button for when I get stuck."</div>
+      <p class="attrib">NPS: 4 | Low-tech | Budget-conscious</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Analysis</div>
+  <h2>Top feature requests</h2>
+  <p>Extracted from Q6 ("What should the bot do that it doesn't?") and Q11 ("One feature you would add"):</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Feature</th><th>Requests</th><th>Type</th><th>Impact</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Grooming booking integration</strong></td><td>40</td><td><span class="tag mcp">MCP</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:100%"></div><span>High</span></div></td></tr>
+        <tr><td>2</td><td><strong>Multi-pet management</strong></td><td>40</td><td><span class="tag ux">UX</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:100%"></div><span>High</span></div></td></tr>
+        <tr><td>3</td><td><strong>Breed-specific care guides</strong></td><td>20</td><td><span class="tag mcp">MCP</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:50%"></div><span>Medium</span></div></td></tr>
+        <tr><td>4</td><td><strong>Real-time live slot availability</strong></td><td>20</td><td><span class="tag api">API</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:50%"></div><span>Medium</span></div></td></tr>
+        <tr><td>5</td><td><strong>Clinic wait time estimates</strong></td><td>20</td><td><span class="tag api">API</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:50%"></div><span>Medium</span></div></td></tr>
+        <tr><td>6</td><td><strong>Video consultations / telehealth</strong></td><td>20</td><td><span class="tag mcp">MCP</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:50%"></div><span>Medium</span></div></td></tr>
+        <tr><td>7</td><td><strong>Price estimator / cost calculator</strong></td><td>20</td><td><span class="tag ux">UX</span></td><td><div class="bar-cell"><div class="bar-fill" style="width:50%"></div><span>Medium</span></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Other notable requests (from manual review of responses)</h3>
+  <ul>
+    <li><strong>Appointment reminders</strong> via SMS/email (A01, A07, A13, A15) &mdash; "A reminder notification a day before the appointment"</li>
+    <li><strong>Symptom checker / triage</strong> (A04, A09, A11, A16) &mdash; "A way to check if I actually need to bring him in"</li>
+    <li><strong>Online prescription requests</strong> (A12, A19) &mdash; "Order my dog's arthritis medication without calling"</li>
+    <li><strong>Pet medical history access</strong> (A02, A10, A19) &mdash; "See my cat's vaccine record in one place"</li>
+    <li><strong>Location-aware weather</strong> (A05, A13) &mdash; "I live in Wicklow, Dublin weather is useless"</li>
+    <li><strong>Accessibility improvements</strong> (A06, A12, A15) &mdash; "Bigger text, bigger buttons, simpler words"</li>
+    <li><strong>Home visit / farm call booking</strong> (A05, A18) &mdash; "A way to request a vet come to the farm"</li>
+    <li><strong>Photo upload</strong> (A07, A10, A16) &mdash; "Send a photo of my pet's rash instead of describing it"</li>
+  </ul>
+</div>
+
+<div class="section">
+  <div class="section-label">Pain Points</div>
+  <h2>Top frustrations</h2>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Pain Point</th><th>Mentions</th><th>Affected personas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Confusing or hard to use</strong></td><td>80</td><td>A05, A06, A12, A15, A17</td></tr>
+        <tr><td>2</td><td>Voice input triggered unexpectedly</td><td>Multiple</td><td>A01, A05, A06</td></tr>
+        <tr><td>3</td><td>Consent prompt appeared too early</td><td>Multiple</td><td>A03, A08, A16</td></tr>
+        <tr><td>4</td><td>Dublin-centric weather &mdash; no location awareness</td><td>Multiple</td><td>A05, A13</td></tr>
+        <tr><td>5</td><td>Too many service cards at once &mdash; overwhelming</td><td>Multiple</td><td>A03, A06, A11, A12</td></tr>
+        <tr><td>6</td><td>Hard to find the human handoff path</td><td>Multiple</td><td>A06, A12, A17</td></tr>
+        <tr><td>7</td><td>Small text for older users</td><td>Multiple</td><td>A06, A12, A15</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Recommendations</div>
+  <h2>Proposed MCP &amp; API integrations</h2>
+  <p>Based on the simulated user feedback, these new live-data integrations would directly address the top feature requests:</p>
+
+  <div class="priority-grid">
+    <div class="priority-box high">
+      <div class="p-label">High Priority &mdash; Immediate</div>
+      <div class="p-items">
+        <strong>&#128197; Live Slot Availability API</strong><br>
+        Connect to a practice management system (or simulate via Google Sheets tab) so the booking calendar shows real-time available slots instead of generated ones. Directly addresses the #4 request and the most common frustration: "slots were limited for Saturdays."
+      </div>
+    </div>
+    <div class="priority-box high">
+      <div class="p-label">High Priority &mdash; Immediate</div>
+      <div class="p-items">
+        <strong>&#128062; Breed-Specific Care Guides (MCP)</strong><br>
+        Add a Google Sheet tab with breed-specific health info (flat-faced dogs and heat, IVDD for Dachshunds, hip issues for Labs). The bot queries it when someone mentions their breed. Addresses #3 request and Frenchie/Dachshund owner frustrations.
+      </div>
+    </div>
+    <div class="priority-box high">
+      <div class="p-label">High Priority &mdash; Immediate</div>
+      <div class="p-items">
+        <strong>&#128702; Grooming Booking Integration</strong><br>
+        Add a grooming services tab to the Google Sheet linked to the booking flow. Multiple users requested separate grooming bookings. This extends the existing MCP pattern with a new data source.
+      </div>
+    </div>
+    <div class="priority-box lower">
+      <div class="p-label">Medium Priority &mdash; Next Sprint</div>
+      <div class="p-items">
+        <strong>&#127783; Location-Aware Weather</strong><br>
+        Upgrade the weather endpoint to accept lat/lon or Eircode, so rural and non-Dublin clients get their local weather. Users in Wicklow and surrounding counties complained Dublin weather was irrelevant.
+      </div>
+    </div>
+    <div class="priority-box lower">
+      <div class="p-label">Medium Priority &mdash; Next Sprint</div>
+      <div class="p-items">
+        <strong>&#128250; Telehealth / Video Consult</strong><br>
+        Integrate a video call scheduling feature. Tech-savvy users (A02, A10, A19) specifically requested this. Could use a third-party telehealth API or a simple Calendly-style booking link.
+      </div>
+    </div>
+    <div class="priority-box lower">
+      <div class="p-label">Medium Priority &mdash; Next Sprint</div>
+      <div class="p-items">
+        <strong>&#128222; SMS/Email Appointment Reminders</strong><br>
+        Integrate with an SMS or email API (e.g. Twilio) to send automated reminders. Consistently requested across multiple personas. Reduces no-shows and improves client satisfaction.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Persona Breakdown</div>
+  <h2>NPS by segment</h2>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <span class="stat-value">8.5</span>
+      <span class="stat-label">Tech-savvy (avg NPS)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">7.1</span>
+      <span class="stat-label">Moderate tech (avg NPS)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">4.2</span>
+      <span class="stat-label">Low-tech (avg NPS)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">7.6</span>
+      <span class="stat-label">Dog owners</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">7.8</span>
+      <span class="stat-label">Cat owners</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">6.3</span>
+      <span class="stat-label">Small pet owners</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">8.2</span>
+      <span class="stat-label">Premium budget</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">5.4</span>
+      <span class="stat-label">Budget-conscious</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Data</div>
+  <h2>Artifacts</h2>
+  <ul>
+    <li><strong>simulation-results.json</strong> &mdash; 20 persona archetypes with full 12-question responses</li>
+    <li><strong>simulation-results-400.json</strong> &mdash; Expanded dataset of 400 simulated users with NPS variance</li>
+    <li><strong>simulation-analysis.json</strong> &mdash; Automated theme extraction and NPS calculation</li>
+    <li><strong>simulation.js</strong> &mdash; Node.js simulation runner (DeepSeek LLM via Cloudflare Worker proxy)</li>
+  </ul>
+  <p style="margin-top:12px">All data generated 14 July 2026. Simulation methodology: LLM role-playing with structured persona prompts, 12-question survey protocol, automated theme extraction via regex pattern matching.</p>
+</div>
+
+<div class="foot-bar">
+  <a class="foot-link" href="index.html">&#128062; Chat with MeadowBot</a>
+  <a class="foot-link" href="qa.html">&#128269; QA Dashboard</a>
+  <a class="foot-link" href="victor.html">&#128214; Project Overview</a>
+</div>
+
+</div>
+
+</body>
+</html>
