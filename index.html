@@ -905,7 +905,7 @@ async function send(){
   if(/^(human|speak to a human|real person|team|staff)$/i.test(S(txt))){hideTyping();showHuman();return}
 
   // STEP 1: LLM response
-  if(LLM_KEY){
+  if(LLM_KEY||API_PROXY){
     var dataMsg=null;
     if(isHolidayPattern(S(txt))){
       await fetchIrishHolidays();
@@ -926,7 +926,7 @@ async function send(){
     if(llmReply){addMsg(llmReply,"bot");bobAskedQ(llmReply)}
     else{addMsg("Hmm, I'm having trouble connecting right now. Try again, or type <strong>speak to a human</strong> to reach our team.",'bot')}
   }
-  if(!LLM_KEY)hideTyping();
+  if(!LLM_KEY&&!API_PROXY)hideTyping();
 
   // STEP 2: Service search
   var kw=extractKeywords(txt);
