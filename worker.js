@@ -113,6 +113,31 @@ export default {
         return json({ error: "Failed to fetch holidays" }, 502);
       }
 
+      // --- /api/weather --------------------------------------------------
+      if (url.pathname === "/api/weather") {
+        const weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=53.3498&longitude=-6.2603&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=Europe/Dublin";
+
+        const cache = caches.default;
+        let cached = await cache.match(weatherUrl);
+        if (cached) return cached;
+
+        const upstream = await fetch(weatherUrl, {
+          headers: { "User-Agent": USER_AGENT }
+        });
+
+        if (upstream.ok) {
+          const resp = new Response(upstream.body, {
+            status: upstream.status,
+            headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=600" }
+          });
+          Object.entries(CORS_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
+          ctx.waitUntil(cache.put(weatherUrl, resp.clone()));
+          return resp;
+        }
+
+        return json({ error: "Failed to fetch weather" }, 502);
+      }
+
       // --- catch-all ---------------------------------------------------
       return json({ error: "Not found" }, 404);
     } catch (e) {
