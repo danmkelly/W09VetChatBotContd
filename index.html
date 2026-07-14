@@ -978,7 +978,7 @@ async function send(){
       memory.consent="no";expectingConsent=false;expectingName=false;saveMemory();
       hideTyping();updateMemoryButtons();
       addMsg("Understood. I won't store anything about you. What can I help with today?",'bot');
-      addSugg([["Dog services","Cat dental","Microchip offers","Walking weather","Breed advice","Holiday hours","Telehealth","Speak to a human"]]);;
+      addSugg(["Dog services","Cat dental","Microchip offers","Walking weather","Breed advice","Holiday hours","Telehealth","Speak to a human"]);;
       lastBotAsked=true;return;
     }
     if(/^(human|speak to a human|real person|team|staff)$/i.test(S(txt))){expectingConsent=false;hideTyping();showHuman();return}
@@ -998,7 +998,7 @@ async function send(){
       document.getElementById("botLabel").textContent="Vet assistant &middot; knows "+name;
       hideTyping();
       addMsg("Pleased to meet you, <strong>"+name+"</strong>! What can I help with today?",'bot');
-      addSugg([["Dog services","Cat dental","Microchip offers","Walking weather","Breed advice","Holiday hours","Telehealth","Speak to a human"]]);;
+      addSugg(["Dog services","Cat dental","Microchip offers","Walking weather","Breed advice","Holiday hours","Telehealth","Speak to a human"]);;
       lastBotAsked=true;return;
     }
   }
