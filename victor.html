@@ -23,6 +23,8 @@ body{
 .sidebar-cta-MeadowBot:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(74,158,142,0.5)}
 .sidebar-cta-qa{background:linear-gradient(135deg,#2A1A1A,#4A2A2A);color:#fff;border:2px solid rgba(232,93,63,0.3)}
 .sidebar-cta-qa:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(232,93,63,0.3);border-color:var(--accent2)}
+.sidebar-cta-github{background:linear-gradient(135deg,#1A1A2A,#2A2A4A);color:#fff;border:2px solid rgba(120,130,200,0.3)}
+.sidebar-cta-github:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(120,130,200,0.3);border-color:#6A7AC0}
 .sidebar-cta .cta-main{font-size:1.05rem;display:block;margin-bottom:4px;color:#fff}
 .sidebar-cta .cta-sub{font-size:0.7rem;opacity:0.85;font-weight:500;margin-top:4px;color:#fff}
 .sidebar-label{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:10px}
@@ -296,19 +298,24 @@ body{
   <div class="page-sidebar">
     <div class="sidebar-label">Jump to action</div>
 
+    <a class="sidebar-cta sidebar-cta-github" href="https://github.com/danmkelly/W09VetChatBotContd" target="_blank">
+      <span class="cta-main">&#128187; GitHub Repo</span>
+      <span class="cta-sub" style="font-size:0.7rem;opacity:0.85;font-weight:500;margin-top:4px;color:#fff">Source code &middot; Cloudflare Worker &middot; Simulation data</span>
+    </a>
+
     <a class="sidebar-cta sidebar-cta-qa" href="qa.html">
       <span class="cta-main">&#128269; QA Dashboard</span>
       <span class="cta-tagline">Design: 4.0/5 (B) &middot; Functional: 3.5/5 (B-)</span>
     </a>
 
-    <a class="sidebar-cta sidebar-cta-MeadowBot" href="index.html">
-      <span class="cta-main">&#128062; Chat with MeadowBot</span>
-      <span class="cta-tagline">Ask about services, prices, offers, or book an appointment!</span>
-    </a>
-
     <a class="sidebar-cta" href="marketresearch.html" style="background:linear-gradient(135deg,#1A2A1A,#2A4A2A);color:#fff;border:2px solid rgba(74,158,142,0.3);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:20px 24px;border-radius:12px;text-decoration:none;font-weight:800;transition:all .2s;box-shadow:0 8px 30px rgba(0,0,0,0.3)">
       <span class="cta-main" style="font-size:1.05rem;display:block;margin-bottom:4px;color:#fff">&#128202; Market Research</span>
       <span class="cta-sub" style="font-size:0.7rem;opacity:0.85;font-weight:500;margin-top:4px;color:#fff">400 simulated users &middot; NPS 6 &middot; 7 feature recommendations</span>
+    </a>
+
+    <a class="sidebar-cta sidebar-cta-MeadowBot" href="index.html">
+      <span class="cta-main">&#128062; Chat with MeadowBot</span>
+      <span class="cta-tagline">Ask about services, prices, offers, or book an appointment!</span>
     </a>
   </div>
 </div>
