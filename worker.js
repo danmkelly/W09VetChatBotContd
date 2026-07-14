@@ -87,6 +87,32 @@ export default {
         });
       }
 
+      // --- /api/holidays ------------------------------------------------
+      if (url.pathname === "/api/holidays") {
+        const year = url.searchParams.get("year") || new Date().getUTCFullYear().toString();
+        const holidayUrl = `https://date.nager.at/api/v4/Holidays/IE/${year}`;
+
+        const cache = caches.default;
+        let cached = await cache.match(holidayUrl);
+        if (cached) return cached;
+
+        const upstream = await fetch(holidayUrl, {
+          headers: { "User-Agent": USER_AGENT }
+        });
+
+        if (upstream.ok) {
+          const resp = new Response(upstream.body, {
+            status: upstream.status,
+            headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=86400" }
+          });
+          Object.entries(CORS_HEADERS).forEach(([k, v]) => resp.headers.set(k, v));
+          ctx.waitUntil(cache.put(holidayUrl, resp.clone()));
+          return resp;
+        }
+
+        return json({ error: "Failed to fetch holidays" }, 502);
+      }
+
       // --- catch-all ---------------------------------------------------
       return json({ error: "Not found" }, 404);
     } catch (e) {
