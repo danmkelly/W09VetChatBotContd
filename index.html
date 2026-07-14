@@ -184,6 +184,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .day-btn .day-name{display:block;font-size:0.58rem;opacity:0.75;text-transform:uppercase;letter-spacing:0.5px}
 .day-btn.day-holiday{border-color:var(--accent2)}
 .day-holiday-tag{display:block;font-size:0.48rem;color:var(--accent2);text-transform:uppercase;font-weight:700;margin-top:2px}
+.day-btn.day-closed{opacity:0.4;pointer-events:none;border-style:dashed}
 .time-slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .time-slot{padding:9px 16px;border-radius:18px;font-size:0.72rem;cursor:pointer;font-family:inherit;border:2px solid var(--border);background:var(--surface2);color:var(--text-dim);transition:all .2s cubic-bezier(.4,0,.2,1);font-weight:500}
 .time-slot:hover{border-color:var(--accent);color:var(--text);transform:scale(1.06);box-shadow:0 2px 8px rgba(0,0,0,0.2)}
@@ -746,7 +747,7 @@ function extractKeywords(txt){
 }
 
 // === LLM ===
-var BOT_VOICE="You are MeadowBot, a professional veterinary clinic assistant at Meadow Vet Care, a modern Irish veterinary practice in Dublin. You serve dogs, cats, rabbits, small mammals, and birds. You know the clinic's 94 services inside out: consultations, preventive care, vaccinations, surgery, dentistry, diagnostics, grooming, nutrition, behaviour, microchipping, end-of-life care, home visits, and emergencies. You can check Irish public/bank holidays from live data and real-time Dublin weather for pet walking advice. You know clinic hours: Mon-Fri 08:00-19:00, Sat 09:00-17:00, Sun & Public/Bank Holidays 10:00-14:00. When someone asks about opening hours or holiday availability, check the [System data] provided and give an accurate answer. When someone asks about weather, walking conditions, or temperature safety for pets, use the [System data] with real-time Dublin weather to give specific advice. Maintain a professional, warm, and helpful tone. Be direct: when someone asks about services or prices, give specific details. When asked about offers, mention them. When asked about booking, guide them to the booking option. When asked about anything else, do your best to help using general veterinary practice knowledge. Never diagnose medical conditions. Keep responses clear and concise (2-5 sentences). No em dashes. No markdown. No slang. Talk like a knowledgeable vet receptionist.";
+var BOT_VOICE="You are MeadowBot, a professional veterinary clinic assistant at Meadow Vet Care, a modern Irish veterinary practice in Dublin. You serve dogs, cats, rabbits, small mammals, and birds. You know the clinic's 94 services inside out: consultations, preventive care, vaccinations, surgery, dentistry, diagnostics, grooming, nutrition, behaviour, microchipping, end-of-life care, home visits, and emergencies. You can check Irish public/bank holidays from live data and real-time Dublin weather for pet walking advice. You know clinic hours: Mon-Fri 08:00-19:00, Sat 09:00-13:00, Closed Sundays and all Public/Bank Holidays. When someone asks about opening hours or holiday availability, check the [System data] provided and give an accurate answer. When someone asks about weather, walking conditions, or temperature safety for pets, use the [System data] with real-time Dublin weather to give specific advice. Maintain a professional, warm, and helpful tone. Be direct: when someone asks about services or prices, give specific details. When asked about offers, mention them. When asked about booking, guide them to the booking option. When asked about anything else, do your best to help using general veterinary practice knowledge. Never diagnose medical conditions. Keep responses clear and concise (2-5 sentences). No em dashes. No markdown. No slang. Talk like a knowledgeable vet receptionist.";
 
 function getMemoryPreamble(){
   var parts=[];
@@ -783,7 +784,7 @@ function bobAskedQ(reply){lastBotAsked=/[?]/.test(reply)||/\b(what|which|when|wh
 function showHuman(){
   document.getElementById("bookingModalInner").innerHTML=
     '<h3>&#128100; Contact Meadow Vet Care</h3>'+
-    '<p style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;margin-bottom:16px"><strong style="color:var(--text)">Meadow Vet Care</strong><br>14 Greenfield Road<br>Dublin 6, D06 VX92<br><br><strong>&#128222; Phone:</strong> <a href="tel:+35318005555" style="color:var(--accent)">+353 1 800 5555</a><br><strong>&#9993; Email:</strong> <a href="mailto:hello@meadowvetcare.ie" style="color:var(--accent)">hello@meadowvetcare.ie</a><br><br><strong>&#128338; Opening hours:</strong><br>Mon-Fri: 08:00 - 19:00<br>Sat: 09:00 - 17:00<br>Sun &amp; Bank Hols: 10:00 - 14:00<br><br><strong>&#128657; Emergency (out of hours):</strong><br>+353 1 800 9999</p>'+
+    '<p style="font-size:0.85rem;color:var(--text-dim);line-height:1.7;margin-bottom:16px"><strong style="color:var(--text)">Meadow Vet Care</strong><br>14 Greenfield Road<br>Dublin 6, D06 VX92<br><br><strong>&#128222; Phone:</strong> <a href="tel:+35318005555" style="color:var(--accent)">+353 1 800 5555</a><br><strong>&#9993; Email:</strong> <a href="mailto:hello@meadowvetcare.ie" style="color:var(--accent)">hello@meadowvetcare.ie</a><br><br><strong>&#128338; Opening hours:</strong><br>Mon-Fri: 08:00 - 19:00<br>Sat: 09:00 - 13:00<br>Sun &amp; Bank Hols: Closed<br><br><strong>&#128657; Emergency (out of hours):</strong><br>+353 1 800 9999</p>'+
     '<div class="modal-btns"><button class="modal-btn modal-btn-submit" onclick="closeBooking()">Got it</button></div>';
   document.getElementById("bookingModal").classList.add("open");
 }
@@ -797,7 +798,7 @@ function openBooking(id,name,price,duration,availability){
   document.getElementById("bookingModalInner").innerHTML=
     '<h3>&#128197; Book: '+escHtml(name)+'</h3>'+
     '<div class="modal-subtitle">&euro;'+escHtml(price)+' &middot; '+escHtml(duration)+' min &middot; '+escHtml(availability)+'</div>'+
-    '<div class="modal-field"><label>Pick a day</label><div class="day-picker" id="dayPicker">'+days.map(function(d,i){return'<button class="day-btn'+(i===0?' active':'')+(d.weekend?'':'')+(d.isHoliday?' day-holiday':'')+'" onclick="selectDay('+i+',this)" title="'+(d.isHoliday?d.holidayName+' - Reduced hours 10:00-14:00':'')+'"><span class="day-name">'+escHtml(d.day)+'</span>'+escHtml(d.date)+(d.isHoliday?'<span class="day-holiday-tag">Bank Hol</span>':'')+'</button>'}).join("")+'</div></div>'+
+    '<div class="modal-field"><label>Pick a day</label><div class="day-picker" id="dayPicker">'+days.map(function(d,i){return'<button class="day-btn'+(i===0?' active':'')+(d.isHoliday?' day-holiday':'')+(d.isClosed?' day-closed':'')+'" onclick="'+(d.isClosed?'':'selectDay('+i+',this)')+'" title="'+(d.isClosed?(d.isHoliday?d.holidayName+' - Closed':'Closed'):'')+'"'+(d.isClosed?' disabled':'')+'><span class="day-name">'+escHtml(d.day)+'</span>'+escHtml(d.date)+(d.isHoliday?'<span class="day-holiday-tag">Closed</span>':(d.isClosed?'<span class="day-holiday-tag">Closed</span>':''))+'</button>'}).join("")+'</div></div>'+
     '<div class="modal-field"><label>Pick a time</label><div class="time-slots" id="timeSlots"></div></div>'+
     '<div class="modal-field"><label>Your name</label><input id="bookName" placeholder="Your full name"></div>'+
     '<div class="modal-field"><label>Pet name</label><input id="bookPetName" placeholder="Your pet\'s name"></div>'+
@@ -806,7 +807,10 @@ function openBooking(id,name,price,duration,availability){
     '<p style="font-size:0.7rem;color:var(--text-dim);margin-top:8px">No payment needed until we confirm availability. We\'ll call you within 4 hours.</p>'+
     '<div class="modal-btns"><button class="modal-btn modal-btn-cancel" onclick="closeBooking()">Cancel</button><button class="modal-btn modal-btn-submit" onclick="submitBooking()">Confirm Booking</button></div>';
   document.getElementById("bookingModal").classList.add("open");
-  selectDay(0,document.getElementById("dayPicker").querySelector(".day-btn"));
+  var firstOpen=-1;
+  var btns=document.getElementById("dayPicker").querySelectorAll(".day-btn");
+  for(var i=0;i<days.length;i++){if(!days[i].isClosed){firstOpen=i;break}}
+  if(firstOpen>=0)selectDay(firstOpen,btns[firstOpen]);
 }
 function getWeekDays(){
   var days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -815,8 +819,10 @@ function getWeekDays(){
     var d=new Date(now);d.setDate(d.getDate()+i);
     var dayName=days[d.getDay()];
     var dateStr=d.getDate()+"/"+(d.getMonth()+1);
+    var isSunday=d.getDay()===0;
     var hol=isHoliday(d);
-    result.push({day:dayName,date:dateStr,weekend:d.getDay()===0||d.getDay()===6,isHoliday:!!hol,holidayName:hol?hol.name:""});
+    var isClosed=isSunday||!!hol;
+    result.push({day:dayName,date:dateStr,isSaturday:d.getDay()===6,isSunday:isSunday,isHoliday:!!hol,isClosed:isClosed,holidayName:hol?hol.name:""});
   }
   return result;
 }
@@ -828,10 +834,17 @@ function selectDay(idx,btn){
 }
 function renderTimeSlots(dayIdx){
   var slots=[];
+  var days=getWeekDays();
+  var dInfo=days[dayIdx];
+  if(dInfo.isClosed){
+    document.getElementById("timeSlots").innerHTML='<p style="color:var(--accent2);font-size:0.78rem;text-align:center;padding:12px">'+(dInfo.isHoliday?dInfo.holidayName+' - Clinic is closed on public holidays.':'Sunday - Clinic is closed.')+'</p>';
+    return;
+  }
   var now=new Date();now.setDate(now.getDate()+dayIdx);
   var isToday=dayIdx===0;
   var baseHour=isToday?Math.max(9,now.getHours()+1):9;
-  for(var h=baseHour;h<17;h++){
+  var endHour=dInfo.isSaturday?13:17;
+  for(var h=baseHour;h<endHour;h++){
     slots.push(h+":00");slots.push(h+":30");
   }
   var ts=document.getElementById("timeSlots");
@@ -953,8 +966,8 @@ async function send(){
         dataMsg="[System data] The user asked about opening hours or public holidays. ";
         if(todayHol)dataMsg+="Today IS a public holiday: "+todayHol.name+". ";
         if(hctx)dataMsg+=hctx;
-        dataMsg+="Clinic hours: Mon-Fri 08:00-19:00, Sat 09:00-17:00, Sun & Bank/Public Holidays 10:00-14:00. "+
-          "If the user asks about a specific date that is a holiday, tell them the reduced hours and name the holiday. "+
+        dataMsg+="Clinic hours: Mon-Fri 08:00-19:00, Sat 09:00-13:00, Closed Sundays and all Public/Bank Holidays. "+
+          "If the user asks about a specific date that is a holiday or Sunday, clearly state the clinic is closed that day. "+
           "If they ask about a date that is not a holiday, confirm normal hours.";
       }
     }
